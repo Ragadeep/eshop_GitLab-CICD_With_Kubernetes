@@ -27,6 +27,17 @@ build_image:
     - build
     - microservices
   variables:
+    VERSION: $CI_PIPELINE_ID
+    ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
+  script:
+    - bash script/docker-release.sh $ADSERVICE_TAG services src/adservice
+
+.build_image2:
+  stage: build
+  tags:
+    - build
+    - microservices
+  variables:
     DOCKER_REGISTRY: eshopimages.azurecr.io
   script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
