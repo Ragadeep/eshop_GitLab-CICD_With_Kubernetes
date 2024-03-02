@@ -20,10 +20,21 @@ stages:
 - incremental rollout 100%
 - performance
 - cleanup
-sast:
+
+build:
+  stage: build
+  tags:
+    - build
+    - microservices
+  script:
+    - echo "Building the Hello World application..."
+    - # Add commands to build your application here
+
+test:
   stage: test
   tags:
     - build
     - microservices
-include:
-  - template: Auto-DevOps.gitlab-ci.yml
+  script:
+    - echo "Running tests for the Hello World application..."
+    - # Add commands to run tests for your application here
