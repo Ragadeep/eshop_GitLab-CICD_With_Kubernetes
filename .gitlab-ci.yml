@@ -40,6 +40,12 @@ build_image:
 
 sast:
   stage: test
+  tags:
+    - build
+    - microservices
+
+
+    
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
