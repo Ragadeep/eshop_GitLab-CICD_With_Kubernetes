@@ -21,7 +21,17 @@ stages:
 - performance
 - cleanup
 
-build:
+build_image:
+  stage: build
+  tags:
+    - build
+    - microservices
+  variables:
+    DOCKER_REGISTRY: eshopimages.azurecr.io
+  script:
+    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
+
+.build:
   stage: build
   tags:
     - build
@@ -29,7 +39,7 @@ build:
   script:
     - echo "Building the Hello World application..."
 
-test:
+.test:
   stage: test
   tags:
     - build
