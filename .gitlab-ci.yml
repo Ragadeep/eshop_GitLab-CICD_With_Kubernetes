@@ -79,27 +79,27 @@ build_frontend:
     - docker build -t $FRONTEND_TAG:$VERSION src/frontend
 
 build_loadgenerator:
-  <<: *.build_image
+  extends: .build_image
   script:
     - docker build -t $LOADGENERATOR_TAG:$VERSION src/loadgenerator
 
 build_paymentservice:
-  <<: *.build_image
+  extends: .build_image
   script:
     - docker build -t $PAYMENTSERVICE_TAG:$VERSION src/paymentservice
 
 build_productcatalogservice:
-  <<: *.build_image
+  extends: .build_image
   script:
     - docker build -t $PRODUCTCATALOGSERVICE_TAG:$VERSION src/productcatalogservice
 
 build_recommendationservice:
-  <<: *.build_image
+  extends: .build_image
   script:
     - docker build -t $RECOMMENDATIONSERVICE_TAG:$VERSION src/recommendationservice
 
 build_shippingservice:
-  <<: *.build_image
+  extends: .build_image
   script:
     - docker build -t $SHIPPINGSERVICE_TAG:$VERSION src/shippingservice
 
