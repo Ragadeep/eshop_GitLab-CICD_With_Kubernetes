@@ -30,6 +30,7 @@ stages:
 
 variables:
   VERSION: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
+  DOCKER_REGISTRY: eshopimages.azurecr.io
   ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
   CARTSERVICE_TAG: eshopimages.azurecr.io/eshop/cartservice
   CHECKOUTSERVICE_TAG: eshopimages.azurecr.io/eshop/checkoutservice
@@ -104,19 +105,69 @@ build_shippingservice:
     - docker build -t $SHIPPINGSERVICE_TAG:$VERSION src/shippingservice
 
 
-.push_image:
+.push_image: &push_image
   stage: push
   tags:
     - build
     - microservices
-  variables:
-    DOCKER_REGISTRY: eshopimages.azurecr.io
-    VERSION: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
-    ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
   before_script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
+
+push_adservice:
+  <<: *push_image
   script:
     - docker push $ADSERVICE_TAG:$VERSION
+
+push_cartservice:
+  <<: *push_image
+  script:
+    - docker push $CARTSERVICE_TAG:$VERSION
+
+push_checkoutservice:
+  <<: *push_image
+  script:
+    - docker push $CHECKOUTSERVICE_TAG:$VERSION
+
+push_currencyservice:
+  <<: *push_image
+  script:
+    - docker push $CURRENCYSERVICE_TAG:$VERSION
+
+push_emailservice:
+  <<: *push_image
+  script:
+    - docker push $EMAILSERVICE_TAG:$VERSION
+
+push_frontend:
+  <<: *push_image
+  script:
+    - docker push $FRONTEND_TAG:$VERSION
+
+push_loadgenerator:
+  <<: *push_image
+  script:
+    - docker push $LOADGENERATOR_TAG:$VERSION
+
+push_paymentservice:
+  <<: *push_image
+  script:
+    - docker push $PAYMENTSERVICE_TAG:$VERSION
+
+push_productcatalogservice:
+  <<: *push_image
+  script:
+    - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
+
+push_recommendationservice:
+  <<: *push_image
+  script:
+    - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
+
+push_shippingservice:
+  <<: *push_image
+  script:
+    - docker push $SHIPPINGSERVICE_TAG:$VERSION
+
 
 
 
