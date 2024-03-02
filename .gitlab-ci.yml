@@ -36,7 +36,7 @@ build_image:
     VERSION: $CI_PIPELINE_ID
     ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice  
   script:
-    - docker build -t $ADSERVICE_TAG:$CI_COMMIT_REF_SLUG src/adservice
+    - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
 
 .build_image3:
   stage: build
