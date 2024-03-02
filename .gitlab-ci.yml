@@ -25,5 +25,5 @@ sast:
   tags:
     - build
     - microservices
-  include:
-    - template: Auto-DevOps.gitlab-ci.yml
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
