@@ -28,7 +28,6 @@ build:
     - microservices
   script:
     - echo "Building the Hello World application..."
-    - # Add commands to build your application here
 
 test:
   stage: test
@@ -37,4 +36,4 @@ test:
     - microservices
   script:
     - echo "Running tests for the Hello World application..."
-    - # Add commands to run tests for your application here
+
