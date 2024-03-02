@@ -26,6 +26,14 @@ build_image:
   tags:
     - build
     - microservices
+  script:
+    - docker build -t myimage:latest src/adservice
+
+.build_image3:
+  stage: build
+  tags:
+    - build
+    - microservices
   variables:
     VERSION: $CI_PIPELINE_ID
     ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
