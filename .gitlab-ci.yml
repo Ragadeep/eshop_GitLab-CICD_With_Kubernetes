@@ -14,6 +14,7 @@ workflow:
 stages:
 - build
 - test
+- push
 - deploy
 - review
 - dast
@@ -38,16 +39,20 @@ build_image:
   script:
     - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
 
-sast:
-  stage: test
+push_image:
+  stage: push
   tags:
     - build
     - microservices
+  variables:
+    DOCKER_REGISTRY: eshopimages.azurecr.io
+    VERSION: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
+    ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
+  before_script:
+    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
+  script:
+    - docker push $ADSERVICE_TAG:$VERSION
 
-
-    
-include:
-  - template: Auto-DevOps.gitlab-ci.yml
 
 .build_image3:
   stage: build
@@ -59,16 +64,6 @@ include:
     ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
   script:
     - bash script/docker-release.sh $ADSERVICE_TAG services src/adservice
-
-.build_image2:
-  stage: build
-  tags:
-    - build
-    - microservices
-  variables:
-    DOCKER_REGISTRY: eshopimages.azurecr.io
-  script:
-    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
 
 .build:
   stage: build
