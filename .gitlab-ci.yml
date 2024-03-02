@@ -5,6 +5,12 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main" && $CI_PIPELINE_SOURCE != "merge_request_event"
+      when: never
+    - when: always
+
 stages:
 - build
 - test
@@ -26,8 +32,11 @@ build_image:
   tags:
     - build
     - microservices
+  variables:
+    VERSION: $CI_PIPELINE_ID
+    ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice  
   script:
-    - docker build -t myimage:latest src/adservice
+    - docker build -t $ADSERVICE_TAG:$CI_COMMIT_REF_SLUG src/adservice
 
 .build_image3:
   stage: build
