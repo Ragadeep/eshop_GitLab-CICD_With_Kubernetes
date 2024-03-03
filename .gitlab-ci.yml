@@ -101,7 +101,7 @@ variables:
 
 #build docker images.
 include:
-  - project: 'your-project-name'
+  - project: 'eshop'
     ref: main
     file:
       - build.yml
