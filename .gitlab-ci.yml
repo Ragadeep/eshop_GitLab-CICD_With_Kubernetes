@@ -100,11 +100,6 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-build:
-  stage: build
-  tags:
-    - build
-    - microservices
 include:
   - local: 'build.yml'
 
