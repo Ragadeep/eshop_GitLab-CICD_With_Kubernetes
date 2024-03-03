@@ -226,7 +226,7 @@ check_critical_errors:
   script:
     - |
       # Get the number of critical errors from the previous pipeline's artifact
-      critical_errors=$(cat previous_pipeline_artifact.txt | grep "CRITICAL" | wc -l)
+      critical_errors=$(cat adservice-image-scan-report.txt | grep "CRITICAL" | wc -l)
       # Compare the number of critical errors with the threshold (5 in this case)
       if [ $critical_errors -gt 5 ]; then
         echo "Number of critical errors is greater than 5. Fail the pipeline."
