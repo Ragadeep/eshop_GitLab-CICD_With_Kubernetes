@@ -262,6 +262,7 @@ Img_scan_recommendationservice:
   artifacts:
     paths:
       - recommendationservice-image-scan-report.txt
+        recommendationservice-image-scan-report.txt
 
 Img_scan_shippingservice:
   <<: *image_scan
@@ -277,43 +278,22 @@ Img_scan_shippingservice:
 check_critical_errors:
   stage: check
   script:
-    - >
-      # Define an array of artifact files
-      artifact_files=("shippingservice-image-scan-report.txt"
-                      "recommendationservice-image-scan-report.txt"
-                      "productcatalogservice-image-scan-report.txt"
-                      "paymentservice-image-scan-report.txt"
-                      "loadgenerator-image-scan-report.txt"
-                      "frontend-image-scan-report.txt"
-                      "emailservice-image-scan-report.txt"
-                      "currencyservice-image-scan-report.txt"
-                      "checkoutservice-image-scan-report.txt"
-                      "cartservice-image-scan-report.txt"
-                      "adservice-image-scan-report.txt")
-
-      # Initialize a variable to count total critical errors
-      total_critical_errors=0
-      
-      # Loop through each artifact file
-      for artifact_file in "${artifact_files[@]}"; do
-        # Check if the artifact file exists
-        if [ -f "$artifact_file" ]; then
-          # Count the number of critical errors in the artifact file and add it to total_critical_errors
-          critical_errors=$(grep -c "CRITICAL" "$artifact_file" || true)
-          total_critical_errors=$((total_critical_errors + critical_errors))
-        else
-          echo "Artifact file '$artifact_file' not found."
-        fi
+    - total_critical_errors=0
+    - for file in *.txt; do
+        critical_errors=$(grep -c "CRITICAL" "$file")
+        echo "File: $file, Critical errors: $critical_errors"
+        total_critical_errors=$((total_critical_errors + critical_errors))
       done
-
-      # Compare the total critical errors with the threshold (5 in this case)
-      if [ $total_critical_errors -gt 5 ]; then
-        echo "Total number of critical errors is greater than 5. Fail the pipeline."
-        exit 1
-      else
-        echo "Total number of critical errors is within threshold. Continue the pipeline."
+    - echo "Total critical errors: $total_critical_errors"
+    - if [ $total_critical_errors -gt 5 ]; then
+        echo "Total critical errors exceed threshold. Failing the pipeline.";
+        exit 1;
       fi
-  allow_failure: true  # Allow this job to fail if any of the previous artifact files are not found
+  artifacts:
+    paths:
+      - "*.txt"
+  allow_failure: true
+
 
 
 
