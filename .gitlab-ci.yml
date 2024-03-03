@@ -103,8 +103,7 @@ variables:
 include:
   - project: 'eshop'
     ref: main
-    file:
-      - build.yml
+    local: 'build.yml'
 
 
 #Image scanning with Trivy
