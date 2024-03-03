@@ -12,7 +12,7 @@ workflow:
       when: never
     - when: always
 
-before_script:     #Cleaning existing images in Runner
+.before_script:     #Cleaning existing images in Runner
   - |
     # Delete Docker images
     if [ "$(docker images -q | wc -l)" -gt 0 ]; then
