@@ -92,7 +92,7 @@ Trivy_file_scan:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy fs . > trivy-file-scanning-report.txt
+    - trivy fs . | tee trivy-file-scanning-report.txt  # Redirect and display output
   artifacts:
     paths:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
