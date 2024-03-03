@@ -106,7 +106,7 @@ build:
     - build
     - microservices
 include:
-  - local: build.yml
+  - local: 'build.yml'
 
 
 #Image scanning with Trivy
