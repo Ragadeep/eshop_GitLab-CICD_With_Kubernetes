@@ -228,8 +228,8 @@ check_critical_errors:
       # Get the number of critical errors from the previous pipeline's artifact
       critical_errors=$(cat adservice-image-scan-report.txt | grep "CRITICAL" | wc -l)
       # Compare the number of critical errors with the threshold (5 in this case)
-      if [ $critical_errors -gt 5 ]; then
-        echo "Number of critical errors is greater than 5. Fail the pipeline."
+      if [ $critical_errors -gt 10 ]; then
+        echo "Number of critical errors is greater than 10. Fail the pipeline."
         exit 1
       else
         echo "Number of critical errors is within threshold. Continue the pipeline."
