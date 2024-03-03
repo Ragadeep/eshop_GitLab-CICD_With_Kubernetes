@@ -278,21 +278,23 @@ Img_scan_shippingservice:
 check_critical_errors:
   stage: check
   script:
-    - total_critical_errors=0
-    - for file in *.txt; do
+    - |
+      total_critical_errors=0
+      for file in *.txt; do
         critical_errors=$(grep -c "CRITICAL" "$file")
         echo "File: $file, Critical errors: $critical_errors"
         total_critical_errors=$((total_critical_errors + critical_errors))
       done
-    - echo "Total critical errors: $total_critical_errors"
-    - if [ $total_critical_errors -gt 5 ]; then
-        echo "Total critical errors exceed threshold. Failing the pipeline.";
-        exit 1;
+      echo "Total critical errors: $total_critical_errors"
+      if [ $total_critical_errors -gt 5 ]; then
+        echo "Total critical errors exceed threshold. Failing the pipeline."
+        exit 1
       fi
   artifacts:
     paths:
       - "*.txt"
   allow_failure: true
+
 
 
 
