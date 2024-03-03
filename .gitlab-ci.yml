@@ -179,7 +179,7 @@ Img_scan_adservice:
     IMAGE: "$ADSERVICE_TAG:$VERSION"
   artifacts:
     paths:
-      - trivy-file-scanning-report.txt  # Specify the path to the text file
+      - adservice-image-scan-report.txt  # Specify the path to the text file
 
 .image_scan_adservice:
   stage: imagescan
@@ -189,7 +189,7 @@ Img_scan_adservice:
   services:
     - docker:dind
   script:
-    - trivy image $ADSERVICE_TAG:$VERSION    #
+    - trivy image $ADSERVICE_TAG:$VERSION 
 
 
 #Push build images to ACR Container Registry
