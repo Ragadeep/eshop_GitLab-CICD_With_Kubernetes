@@ -12,10 +12,10 @@ workflow:
       when: never
     - when: always
 
-before_script:     #Cleaning existing images in Runner
+before_script:
   - |
-    # Delete Docker images
-    if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
+    # Delete Docker images only if this is the first job in the pipeline
+    if [ "$CI_JOB_NAME" == "$CI_PIPELINE_SOURCE" ]; then
       if [ "$(docker images -q | wc -l)" -gt 0 ]; then
         docker rmi --force $(docker images -q)
       else
