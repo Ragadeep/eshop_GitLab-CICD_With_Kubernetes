@@ -22,7 +22,6 @@ before_script:     #Cleaning existing images in Runner
     fi
 
 stages:
-- codescan
 - build
 - test
 - push
@@ -54,9 +53,8 @@ variables:
   RECOMMENDATIONSERVICE_TAG: eshopimages.azurecr.io/eshop/recommendationservice
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
 
-codescan:
-  stage: codescan
-  image:
+sonarqube-check:
+  image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
   variables:
