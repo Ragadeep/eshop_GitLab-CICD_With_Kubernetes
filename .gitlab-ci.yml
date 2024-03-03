@@ -187,6 +187,7 @@ image_scan_adservice:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
+    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
     - trivy image eshopimages.azurecr.io/eshop/shippingservice:main-49
 
 
