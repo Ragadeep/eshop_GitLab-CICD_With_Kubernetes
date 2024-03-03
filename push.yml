@@ -1,0 +1,62 @@
+.push_image: &push_image
+  stage: push
+  tags:
+    - build
+    - microservices
+  before_script:
+    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
+
+push_adservice:
+  <<: *push_image
+  script:
+    - docker push $ADSERVICE_TAG:$VERSION
+
+push_cartservice:
+  <<: *push_image
+  script:
+    - docker push $CARTSERVICE_TAG:$VERSION
+
+push_checkoutservice:
+  <<: *push_image
+  script:
+    - docker push $CHECKOUTSERVICE_TAG:$VERSION
+
+push_currencyservice:
+  <<: *push_image
+  script:
+    - docker push $CURRENCYSERVICE_TAG:$VERSION
+
+push_emailservice:
+  <<: *push_image
+  script:
+    - docker push $EMAILSERVICE_TAG:$VERSION
+
+push_frontend:
+  <<: *push_image
+  script:
+    - docker push $FRONTEND_TAG:$VERSION
+
+push_loadgenerator:
+  <<: *push_image
+  script:
+    - docker push $LOADGENERATOR_TAG:$VERSION
+
+push_paymentservice:
+  <<: *push_image
+  script:
+    - docker push $PAYMENTSERVICE_TAG:$VERSION
+
+push_productcatalogservice:
+  <<: *push_image
+  script:
+    - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
+
+push_recommendationservice:
+  <<: *push_image
+  script:
+    - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
+
+push_shippingservice:
+  <<: *push_image
+  script:
+    - docker push $SHIPPINGSERVICE_TAG:$VERSION

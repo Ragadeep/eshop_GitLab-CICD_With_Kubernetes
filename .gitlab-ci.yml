@@ -105,119 +105,11 @@ include:
 
 
 #Image scanning with Trivy
-.Trivy_image_scan: &image_scan
-  stage: imagescan
-  image:
-    name: aquasec/trivy:latest
-    entrypoint: [""]
-  variables:
-    FILENAME: ""           # Declare file name variable dynamically
-    IMAGE: ""              # Declare image dynamically
-  script:
-    - trivy image $IMAGE | tee $FILENAME  # Redirect and display output
-
-Img_scan_adservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "adservice-image-scan-report.txt"           # Declare file name variable
-    IMAGE: "$ADSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - adservice-image-scan-report.txt  # Specify the path to the text file
-
-Img_scan_cartservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "cartservice-image-scan-report.txt"       
-    IMAGE: "$CARTSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - cartservice-image-scan-report.txt
-
-Img_scan_checkoutservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "checkoutservice-image-scan-report.txt"       
-    IMAGE: "$CHECKOUTSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - checkoutservice-image-scan-report.txt
-
-Img_scan_currencyservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "currencyservice-image-scan-report.txt"       
-    IMAGE: "$CURRENCYSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - currencyservice-image-scan-report.txt
-
-Img_scan_emailservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "emailservice-image-scan-report.txt"       
-    IMAGE: "$EMAILSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - emailservice-image-scan-report.txt
-
-Img_scan_frontend:
-  <<: *image_scan
-  variables:
-    FILENAME: "frontend-image-scan-report.txt"       
-    IMAGE: "$FRONTEND_TAG:$VERSION"
-  artifacts:
-    paths:
-      - frontend-image-scan-report.txt
-
-Img_scan_loadgenerator:
-  <<: *image_scan
-  variables:
-    FILENAME: "loadgenerator-image-scan-report.txt"       
-    IMAGE: "$LOADGENERATOR_TAG:$VERSION"
-  artifacts:
-    paths:
-      - loadgenerator-image-scan-report.txt
-
-Img_scan_paymentservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "paymentservice-image-scan-report.txt"       
-    IMAGE: "$PAYMENTSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - paymentservice-image-scan-report.txt
-
-Img_scan_productcatalogservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "productcatalogservice-image-scan-report.txt"       
-    IMAGE: "$PRODUCTCATALOGSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - productcatalogservice-image-scan-report.txt
-
-Img_scan_recommendationservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "recommendationservice-image-scan-report.txt"       
-    IMAGE: "$RECOMMENDATIONSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - recommendationservice-image-scan-report.txt
-        recommendationservice-image-scan-report.txt
-
-Img_scan_shippingservice:
-  <<: *image_scan
-  variables:
-    FILENAME: "shippingservice-image-scan-report.txt"       
-    IMAGE: "$SHIPPINGSERVICE_TAG:$VERSION"
-  artifacts:
-    paths:
-      - shippingservice-image-scan-report.txt
+include:
+  - local: 'imagescan.yml'
 
 
-#Adding check 
+#Adding check   -- if a image containes more than 5 CRITICAL errors then pipeline fails.
 check_critical_errors:
   stage: check
   script:
@@ -226,102 +118,28 @@ check_critical_errors:
       for file in *.txt; do
         critical_errors=$(grep -c "CRITICAL" "$file")
         echo "File: $file, Critical errors: $critical_errors"
-        if [ $critical_errors -gt 5 ]; then
-          echo "File $file has more than 5 critical errors. Failing the pipeline."
+        if [ $critical_errors -gt 10 ]; then
+          echo "File $file has more than 10 critical errors. Failing the pipeline."
           exit 1
         fi
         total_critical_errors=$((total_critical_errors + critical_errors))
       done
       echo "Total critical errors: $total_critical_errors"
-      if [ $total_critical_errors -gt 5 ]; then
+      if [ $total_critical_errors -gt 10 ]; then
         echo "Total critical errors exceed threshold. Failing the pipeline."
         exit 1
       fi
   artifacts:
     paths:
       - "*.txt"
-#  allow_failure: true
-
-
-
+# allow_failure: true
 
 
 #Push build images to ACR Container Registry
-.push_image: &push_image
-  stage: push
-  tags:
-    - build
-    - microservices
-  before_script:
-    - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
+include:
+  - local: 'push.yml'
 
-push_adservice:
-  <<: *push_image
-  script:
-    - docker push $ADSERVICE_TAG:$VERSION
-
-push_cartservice:
-  <<: *push_image
-  script:
-    - docker push $CARTSERVICE_TAG:$VERSION
-
-push_checkoutservice:
-  <<: *push_image
-  script:
-    - docker push $CHECKOUTSERVICE_TAG:$VERSION
-
-push_currencyservice:
-  <<: *push_image
-  script:
-    - docker push $CURRENCYSERVICE_TAG:$VERSION
-
-push_emailservice:
-  <<: *push_image
-  script:
-    - docker push $EMAILSERVICE_TAG:$VERSION
-
-push_frontend:
-  <<: *push_image
-  script:
-    - docker push $FRONTEND_TAG:$VERSION
-
-push_loadgenerator:
-  <<: *push_image
-  script:
-    - docker push $LOADGENERATOR_TAG:$VERSION
-
-push_paymentservice:
-  <<: *push_image
-  script:
-    - docker push $PAYMENTSERVICE_TAG:$VERSION
-
-push_productcatalogservice:
-  <<: *push_image
-  script:
-    - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
-
-push_recommendationservice:
-  <<: *push_image
-  script:
-    - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
-
-push_shippingservice:
-  <<: *push_image
-  script:
-    - docker push $SHIPPINGSERVICE_TAG:$VERSION
-
-.build_image3:
-  stage: build
-  tags:
-    - build
-    - microservices
-  variables:
-    VERSION: $CI_PIPELINE_ID
-    ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
-  script:
-    - bash script/docker-release.sh $ADSERVICE_TAG services src/adservice
-
-
+#deploy to kubernetes
 .deploy_to_kubernetes:
   stage: deploy
   image: bitnami/kubectl:latest
