@@ -1,0 +1,60 @@
+.build_image:
+  stage: build
+  tags:
+    - build
+    - microservices
+
+build_adservice:
+  extends: .build_image
+  script:
+    - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
+
+build_cartservice:
+  extends: .build_image
+  script:
+    - docker build -t $CARTSERVICE_TAG:$VERSION src/cartservice/src
+
+build_checkoutservice:
+  extends: .build_image
+  script:
+    - docker build -t $CHECKOUTSERVICE_TAG:$VERSION src/checkoutservice
+
+build_currencyservice:
+  extends: .build_image
+  script:
+    - docker build -t $CURRENCYSERVICE_TAG:$VERSION src/currencyservice
+
+build_emailservice:
+  extends: .build_image
+  script:
+    - docker build -t $EMAILSERVICE_TAG:$VERSION src/checkoutservice
+
+build_frontend:
+  extends: .build_image
+  script:
+    - docker build -t $FRONTEND_TAG:$VERSION src/frontend
+
+build_loadgenerator:
+  extends: .build_image
+  script:
+    - docker build -t $LOADGENERATOR_TAG:$VERSION src/loadgenerator
+
+build_paymentservice:
+  extends: .build_image
+  script:
+    - docker build -t $PAYMENTSERVICE_TAG:$VERSION src/paymentservice
+
+build_productcatalogservice:
+  extends: .build_image
+  script:
+    - docker build -t $PRODUCTCATALOGSERVICE_TAG:$VERSION src/productcatalogservice
+
+build_recommendationservice:
+  extends: .build_image
+  script:
+    - docker build -t $RECOMMENDATIONSERVICE_TAG:$VERSION src/recommendationservice
+
+build_shippingservice:
+  extends: .build_image
+  script:
+    - docker build -t $SHIPPINGSERVICE_TAG:$VERSION src/shippingservice
