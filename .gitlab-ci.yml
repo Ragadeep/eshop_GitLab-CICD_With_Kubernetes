@@ -117,6 +117,7 @@ build_shippingservice:
 push_adservice:
   <<: *push_image
   script:
+    - docker push $ADSERVICE_TAG:$CI_COMMIT_REF_SLUG
     - docker push $ADSERVICE_TAG:$VERSION
 
 push_cartservice:
