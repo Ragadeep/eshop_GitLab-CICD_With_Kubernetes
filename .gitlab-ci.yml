@@ -54,9 +54,6 @@ variables:
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
 
 sonarqube-check:
-  tags:
-    - build
-    - microservices
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
