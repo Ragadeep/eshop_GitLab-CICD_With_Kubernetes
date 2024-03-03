@@ -139,7 +139,8 @@ deploy_to_kubernetes:
     - build
     - microservices
   script:
-    - chmod 600 chmod 600 /path/to/private_key.pem
-    - ssh -v -i $kubelogin raga@13.71.64.229
+    - echo "$SSH_PRIVATE_KEY" > kubelogin
+    - chmod 600 kubelogin
+    - ssh -i kubelogin raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
