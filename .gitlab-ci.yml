@@ -187,7 +187,9 @@ Image_scan_adservice:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy image $ADSERVICE_TAG:$VERSION  
+    - trivy image $ADSERVICE_TAG:$VERSION 
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock 
 
 
 #Push build images to ACR Container Registry
