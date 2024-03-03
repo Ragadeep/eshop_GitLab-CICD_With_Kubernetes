@@ -12,6 +12,10 @@ workflow:
       when: never
     - when: always
 
+before_script:
+  - docker ps -aq --filter "status=exited" | xargs docker rm  # Remove all stopped containers
+  - docker rmi -f $(docker images -q)  # Force delete all Docker images
+
 stages:
 - build
 - test
@@ -55,52 +59,52 @@ build_adservice:
   script:
     - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
 
-build_cartservice:
+.build_cartservice:
   extends: .build_image
   script:
     - docker build -t $CARTSERVICE_TAG:$VERSION src/cartservice/src
 
-build_checkoutservice:
+.build_checkoutservice:
   extends: .build_image
   script:
     - docker build -t $CHECKOUTSERVICE_TAG:$VERSION src/checkoutservice
 
-build_currencyservice:
+.build_currencyservice:
   extends: .build_image
   script:
     - docker build -t $CURRENCYSERVICE_TAG:$VERSION src/currencyservice
 
-build_emailservice:
+.build_emailservice:
   extends: .build_image
   script:
     - docker build -t $EMAILSERVICE_TAG:$VERSION src/checkoutservice
 
-build_frontend:
+.build_frontend:
   extends: .build_image
   script:
     - docker build -t $FRONTEND_TAG:$VERSION src/frontend
 
-build_loadgenerator:
+.build_loadgenerator:
   extends: .build_image
   script:
     - docker build -t $LOADGENERATOR_TAG:$VERSION src/loadgenerator
 
-build_paymentservice:
+.build_paymentservice:
   extends: .build_image
   script:
     - docker build -t $PAYMENTSERVICE_TAG:$VERSION src/paymentservice
 
-build_productcatalogservice:
+.build_productcatalogservice:
   extends: .build_image
   script:
     - docker build -t $PRODUCTCATALOGSERVICE_TAG:$VERSION src/productcatalogservice
 
-build_recommendationservice:
+.build_recommendationservice:
   extends: .build_image
   script:
     - docker build -t $RECOMMENDATIONSERVICE_TAG:$VERSION src/recommendationservice
 
-build_shippingservice:
+.build_shippingservice:
   extends: .build_image
   script:
     - docker build -t $SHIPPINGSERVICE_TAG:$VERSION src/shippingservice
@@ -117,55 +121,60 @@ build_shippingservice:
 push_adservice:
   <<: *push_image
   script:
+    - docker tag $IMAGE_TAG:$CI_COMMIT_REF_SLUG $IMAGE_TAG:$VERSION
     - docker push $ADSERVICE_TAG:$CI_COMMIT_REF_SLUG
     - docker push $ADSERVICE_TAG:$VERSION
 
-push_cartservice:
+#docker tag $IMAGE_TAG:$CI_COMMIT_REF_SLUG $IMAGE_TAG:$VERSION
+#docker push $IMAGE_TAG:$CI_COMMIT_REF_SLUG
+#docker push $IMAGE_TAG:$VERSION
+
+.push_cartservice:
   <<: *push_image
   script:
     - docker push $CARTSERVICE_TAG:$VERSION
 
-push_checkoutservice:
+.push_checkoutservice:
   <<: *push_image
   script:
     - docker push $CHECKOUTSERVICE_TAG:$VERSION
 
-push_currencyservice:
+.push_currencyservice:
   <<: *push_image
   script:
     - docker push $CURRENCYSERVICE_TAG:$VERSION
 
-push_emailservice:
+.push_emailservice:
   <<: *push_image
   script:
     - docker push $EMAILSERVICE_TAG:$VERSION
 
-push_frontend:
+.push_frontend:
   <<: *push_image
   script:
     - docker push $FRONTEND_TAG:$VERSION
 
-push_loadgenerator:
+.push_loadgenerator:
   <<: *push_image
   script:
     - docker push $LOADGENERATOR_TAG:$VERSION
 
-push_paymentservice:
+.push_paymentservice:
   <<: *push_image
   script:
     - docker push $PAYMENTSERVICE_TAG:$VERSION
 
-push_productcatalogservice:
+.push_productcatalogservice:
   <<: *push_image
   script:
     - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
 
-push_recommendationservice:
+.push_recommendationservice:
   <<: *push_image
   script:
     - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
 
-push_shippingservice:
+.push_shippingservice:
   <<: *push_image
   script:
     - docker push $SHIPPINGSERVICE_TAG:$VERSION
