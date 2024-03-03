@@ -94,6 +94,9 @@ Trivy_file_scan:
   script:
     - trivy fs . 
   artifacts:
+    when: always
+    paths:
+      - /builds/root/eshop/trivy-file-scanning-report.json
     reports:
       container_scanning: trivy-file-scanning-report.json
 
