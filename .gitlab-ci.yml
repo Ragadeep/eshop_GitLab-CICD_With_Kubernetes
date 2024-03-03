@@ -172,7 +172,7 @@ build_adservice:
   script:
     - trivy image $IMAGE | tee $FILENAME  # Redirect and display output
 
-Img_scan_adservice:
+.Img_scan_adservice:
   <<: *image_scan
   variables:
     FILENAME: "adservice-image-scan-report.txt"           # Declare file name variable
@@ -180,6 +180,14 @@ Img_scan_adservice:
   artifacts:
     paths:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
+
+Image_scan_adservice:
+   stage: imagescan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - trivy image $ADSERVICE_TAG:$VERSION  
 
 
 #Push build images to ACR Container Registry
