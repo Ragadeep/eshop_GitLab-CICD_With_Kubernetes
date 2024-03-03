@@ -12,7 +12,7 @@ workflow:
       when: never
     - when: always
 
-.before_script:     #Cleaning existing images in Runner
+before_script:     #Cleaning existing images in Runner
   - |
     # Delete Docker images
     if [ "$(docker images -q | wc -l)" -gt 0 ]; then
@@ -22,8 +22,8 @@ workflow:
     fi
 
 stages:
-- build
 - test
+- build
 - push
 - deploy
 - review
@@ -78,7 +78,7 @@ sonarqube-check:
     - build
     - microservices
 
-.build_adservice:
+build_adservice:
   extends: .build_image
   script:
     - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
@@ -142,7 +142,7 @@ sonarqube-check:
   before_script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
 
-.push_adservice:
+push_adservice:
   <<: *push_image
   script:
     - docker push $ADSERVICE_TAG:$VERSION
