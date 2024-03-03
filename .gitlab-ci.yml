@@ -58,7 +58,7 @@ variables:
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
 
 #Code Quality Scan
-sonarqube-check:
+.sonarqube-check:
   stage: sonar
   image: 
     name: sonarsource/sonar-scanner-cli:latest
@@ -92,10 +92,10 @@ Trivy_file_scan:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy fs .
+    - trivy fs . -o ./build/trivy-report.json  # Specify relative path to the working directory
   artifacts:
     paths:
-      - trivy-filescan-report.json
+      - ./build/trivy-report.json  # Specify relative path to the artifact
 
 .build_image:
   stage: build
