@@ -80,7 +80,7 @@ sonarqube-check:
     - build
     - microservices
 
-build_adservice:
+.build_adservice:
   extends: .build_image
   script:
     - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
@@ -144,7 +144,7 @@ build_adservice:
   before_script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
 
-push_adservice:
+.push_adservice:
   <<: *push_image
   script:
     - docker push $ADSERVICE_TAG:$VERSION
