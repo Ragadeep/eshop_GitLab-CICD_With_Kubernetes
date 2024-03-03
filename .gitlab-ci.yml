@@ -102,7 +102,9 @@ variables:
 #build docker images.
 include:
   - project: 'your-project-name'
-    file: 'build.yml'
+    ref: main
+    file:
+      - build.yml
 
 
 #Image scanning with Trivy
