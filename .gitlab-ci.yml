@@ -102,10 +102,12 @@ variables:
 #build docker images.
 include:
   - local: 'build.yml'
+  - local: 'imagescan.yml'
+  - local: 'push.yml'
 
 
 #Image scanning with Trivy
-include:
+.include:
   - local: 'imagescan.yml'
 
 
@@ -136,7 +138,7 @@ check_critical_errors:
 
 
 #Push build images to ACR Container Registry
-include:
+.include:
   - local: 'push.yml'
 
 #deploy to kubernetes
