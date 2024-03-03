@@ -182,7 +182,7 @@ Img_scan_adservice:
     paths:
       - adservice-image-scan-report.txt  # Specify the path to the text file
 
-.Img_scan_cartservice:
+Img_scan_cartservice:
   <<: *image_scan
   variables:
     FILENAME: "cartservice-image-scan-report.txt"       
@@ -191,7 +191,7 @@ Img_scan_adservice:
     paths:
       - cartservice-image-scan-report.txt
 
-.Img_scan_checkoutservice:
+Img_scan_checkoutservice:
   <<: *image_scan
   variables:
     FILENAME: "checkoutservice-image-scan-report.txt"       
@@ -200,7 +200,7 @@ Img_scan_adservice:
     paths:
       - checkoutservice-image-scan-report.txt
 
-.Img_scan_currencyservice:
+Img_scan_currencyservice:
   <<: *image_scan
   variables:
     FILENAME: "currencyservice-image-scan-report.txt"       
@@ -209,7 +209,7 @@ Img_scan_adservice:
     paths:
       - currencyservice-image-scan-report.txt
 
-.Img_scan_emailservice:
+Img_scan_emailservice:
   <<: *image_scan
   variables:
     FILENAME: "emailservice-image-scan-report.txt"       
@@ -218,30 +218,108 @@ Img_scan_adservice:
     paths:
       - emailservice-image-scan-report.txt
 
+Img_scan_frontend:
+  <<: *image_scan
+  variables:
+    FILENAME: "frontend-image-scan-report.txt"       
+    IMAGE: "$FRONTEND_TAG:$VERSION"
+  artifacts:
+    paths:
+      - frontend-image-scan-report.txt
+
+Img_scan_loadgenerator:
+  <<: *image_scan
+  variables:
+    FILENAME: "loadgenerator-image-scan-report.txt"       
+    IMAGE: "$LOADGENERATOR_TAG:$VERSION"
+  artifacts:
+    paths:
+      - loadgenerator-image-scan-report.txt
+
+Img_scan_paymentservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "paymentservice-image-scan-report.txt"       
+    IMAGE: "$PAYMENTSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - paymentservice-image-scan-report.txt
+
+Img_scan_productcatalogservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "productcatalogservice-image-scan-report.txt"       
+    IMAGE: "$PRODUCTCATALOGSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - productcatalogservice-image-scan-report.txt
+
+Img_scan_recommendationservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "recommendationservice-image-scan-report.txt"       
+    IMAGE: "$RECOMMENDATIONSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - recommendationservice-image-scan-report.txt
+
+Img_scan_shippingservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "shippingservice-image-scan-report.txt"       
+    IMAGE: "$SHIPPINGSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - shippingservice-image-scan-report.txt
 
 
 #Adding check 
 check_critical_errors:
   stage: check
   script:
-    - |
-      # Get the number of critical errors from the previous pipeline's artifact
-      critical_errors=$(cat adservice-image-scan-report.txt | grep "CRITICAL" | wc -l)
-      # Compare the number of critical errors with the threshold (5 in this case)
-      if [ $critical_errors -gt 10 ]; then
-        echo "Number of critical errors is greater than 10. Fail the pipeline."
+    - >
+      # Define an array of artifact files
+      artifact_files=("shippingservice-image-scan-report.txt"
+                      "recommendationservice-image-scan-report.txt"
+                      "productcatalogservice-image-scan-report.txt"
+                      "paymentservice-image-scan-report.txt"
+                      "loadgenerator-image-scan-report.txt"
+                      "frontend-image-scan-report.txt"
+                      "emailservice-image-scan-report.txt"
+                      "currencyservice-image-scan-report.txt"
+                      "checkoutservice-image-scan-report.txt"
+                      "cartservice-image-scan-report.txt"
+                      "adservice-image-scan-report.txt")
+
+      # Initialize a variable to count total critical errors
+      total_critical_errors=0
+      
+      # Loop through each artifact file
+      for artifact_file in "${artifact_files[@]}"; do
+        # Check if the artifact file exists
+        if [ -f "$artifact_file" ]; then
+          # Count the number of critical errors in the artifact file and add it to total_critical_errors
+          critical_errors=$(grep -c "CRITICAL" "$artifact_file" || true)
+          total_critical_errors=$((total_critical_errors + critical_errors))
+        else
+          echo "Artifact file '$artifact_file' not found."
+        fi
+      done
+
+      # Compare the total critical errors with the threshold (5 in this case)
+      if [ $total_critical_errors -gt 5 ]; then
+        echo "Total number of critical errors is greater than 5. Fail the pipeline."
         exit 1
       else
-        echo "Number of critical errors is within threshold. Continue the pipeline."
+        echo "Total number of critical errors is within threshold. Continue the pipeline."
       fi
-  dependencies:
-    - Img_scan_adservice
-  allow_failure: true  # Allow this job to fail if the previous pipeline's artifact is not found or if the script encounters an error
+  allow_failure: true  # Allow this job to fail if any of the previous artifact files are not found
+
 
 
 
 #Push build images to ACR Container Registry
-.push_image: &push_image
+push_image: &push_image
   stage: push
   tags:
     - build
@@ -249,57 +327,57 @@ check_critical_errors:
   before_script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
 
-.push_adservice:
+push_adservice:
   <<: *push_image
   script:
     - docker push $ADSERVICE_TAG:$VERSION
 
-.push_cartservice:
+push_cartservice:
   <<: *push_image
   script:
     - docker push $CARTSERVICE_TAG:$VERSION
 
-.push_checkoutservice:
+push_checkoutservice:
   <<: *push_image
   script:
     - docker push $CHECKOUTSERVICE_TAG:$VERSION
 
-.push_currencyservice:
+push_currencyservice:
   <<: *push_image
   script:
     - docker push $CURRENCYSERVICE_TAG:$VERSION
 
-.push_emailservice:
+push_emailservice:
   <<: *push_image
   script:
     - docker push $EMAILSERVICE_TAG:$VERSION
 
-.push_frontend:
+push_frontend:
   <<: *push_image
   script:
     - docker push $FRONTEND_TAG:$VERSION
 
-.push_loadgenerator:
+push_loadgenerator:
   <<: *push_image
   script:
     - docker push $LOADGENERATOR_TAG:$VERSION
 
-.push_paymentservice:
+push_paymentservice:
   <<: *push_image
   script:
     - docker push $PAYMENTSERVICE_TAG:$VERSION
 
-.push_productcatalogservice:
+push_productcatalogservice:
   <<: *push_image
   script:
     - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
 
-.push_recommendationservice:
+push_recommendationservice:
   <<: *push_image
   script:
     - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
 
-.push_shippingservice:
+push_shippingservice:
   <<: *push_image
   script:
     - docker push $SHIPPINGSERVICE_TAG:$VERSION
