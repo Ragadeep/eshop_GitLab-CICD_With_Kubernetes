@@ -137,6 +137,6 @@ deploy_to_kubernetes:
   stage: deploy
 # image: bitnami/kubectl:latest
   script:
-    - ssh -i $kubelogin raga@13.71.64.229
+    - ssh -v -i $kubelogin raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
