@@ -181,15 +181,41 @@ Img_scan_adservice:
     paths:
       - adservice-image-scan-report.txt  # Specify the path to the text file
 
-.image_scan_adservice:
-  stage: imagescan
-  image:
-    name: aquasec/trivy:latest
-    entrypoint: [""]
-  services:
-    - docker:dind
-  script:
-    - trivy image $ADSERVICE_TAG:$VERSION 
+Img_scan_cartservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "cartservice-image-scan-report.txt"       
+    IMAGE: "$CARTSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - cartservice-image-scan-report.txt
+
+Img_scan_checkoutservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "checkoutservice-image-scan-report.txt"       
+    IMAGE: "$CHECKOUTSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - checkoutservice-image-scan-report.txt
+
+Img_scan_currencyservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "currencyservice-image-scan-report.txt"       
+    IMAGE: "$CURRENCYSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - currencyservice-image-scan-report.txt
+
+Img_scan_emailservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "emailservice-image-scan-report.txt"       
+    IMAGE: "$EMAILSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - emailservice-image-scan-report.txt
 
 
 #Push build images to ACR Container Registry
