@@ -189,8 +189,7 @@ image_scan_adservice:
   services:
     - docker:dind
   script:
-    - docker login eshopimages.azurecr.io -u $ACR_USER -p $ACR_PASSWORD
-    - trivy image eshopimages.azurecr.io/eshop/shippingservice:main-49
+    - trivy image $ADSERVICE_TAG:$VERSION
 
 
 #Push build images to ACR Container Registry
