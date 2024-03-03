@@ -100,19 +100,14 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-include:
+.include:
   - local: 'build.yml'
   - local: 'imagescan.yml'
   - local: 'push.yml'
 
 
-#Image scanning with Trivy
-.include:
-  - local: 'imagescan.yml'
-
-
 #Adding check   -- if a image containes more than 5 CRITICAL errors then pipeline fails.
-check_critical_errors:
+.check_critical_errors:
   stage: check
   script:
     - |
@@ -137,16 +132,11 @@ check_critical_errors:
 # allow_failure: true
 
 
-#Push build images to ACR Container Registry
-.include:
-  - local: 'push.yml'
-
 #deploy to kubernetes
 .deploy_to_kubernetes:
   stage: deploy
   image: bitnami/kubectl:latest
   script:
-    - kubectl apply -f path/to/kubernetes/manifests
-
-
+    - ssh -i $kubelogin raga@13.71.64.229
+  # - kubectl apply -f path/to/kubernetes/manifests
 
