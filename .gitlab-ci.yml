@@ -65,7 +65,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script: 
-    - sonar-scanner
+    - sonar-scanner -X  # Enable full debug logging
   allow_failure: true
   only:
     - main
