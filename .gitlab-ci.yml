@@ -92,10 +92,10 @@ Trivy_file_scan:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy fs . -o ./build/trivy-report.json  # Specify relative path to the working directory
+    - trivy fs . 
   artifacts:
-    paths:
-      - ./build/trivy-report.json  # Specify relative path to the artifact
+    reports:
+      file_scanning: trivy-file-scanning-report.json
 
 .build_image:
   stage: build
