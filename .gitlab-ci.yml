@@ -55,7 +55,7 @@ variables:
   RECOMMENDATIONSERVICE_TAG: eshopimages.azurecr.io/eshop/recommendationservice
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
 
-sonarqube-check:
+.sonarqube-check:
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -73,6 +73,13 @@ sonarqube-check:
   only:
     - main
 
+sast:
+  stage: test
+  tags:
+    - build
+    - microservices
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
 
 .build_image:
   stage: build
