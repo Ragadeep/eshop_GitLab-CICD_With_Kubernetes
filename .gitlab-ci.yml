@@ -182,7 +182,7 @@ build_adservice:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 Image_scan_adservice:
-   stage: imagescan
+  stage: imagescan
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
