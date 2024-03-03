@@ -23,7 +23,7 @@ FROM base as builder
 #    make \
 #    g++
 RUN apk update && \
-    apk add --no-cache python3 make g++
+    apk add --no-cache python3 make g++           #changed RUN as I am using Ubuntu based Runner.
 
 WORKDIR /usr/src/app
 
