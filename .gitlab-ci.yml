@@ -12,9 +12,14 @@ workflow:
       when: never
     - when: always
 
-before_script:
-  - docker ps -aq --filter "status=exited" | xargs docker rm  # Remove all stopped containers
-  - docker rmi -f $(docker images -q)  # Force delete all Docker images
+.before_script:
+  - |
+    if [ "$(docker ps -aq --filter status=exited | wc -l)" -gt 0 ]; then
+      docker ps -aq --filter status=exited | xargs docker rm
+    else
+      echo "No exited containers to remove."
+    fi
+
 
 stages:
 - build
