@@ -133,7 +133,7 @@ variables:
 
 
 #deploy to kubernetes
-.deploy_to_kubernetes:
+deploy_to_kubernetes:
   stage: deploy
   image: bitnami/kubectl:latest
   script:
