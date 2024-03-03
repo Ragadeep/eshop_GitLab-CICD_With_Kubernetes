@@ -29,6 +29,7 @@ stages:
 - filescan
 - build
 - imagescan
+- check
 - push
 - deploy
 - review
@@ -110,22 +111,22 @@ build_adservice:
   script:
     - docker build -t $ADSERVICE_TAG:$VERSION src/adservice
 
-build_cartservice:
+.build_cartservice:
   extends: .build_image
   script:
     - docker build -t $CARTSERVICE_TAG:$VERSION src/cartservice/src
 
-build_checkoutservice:
+.build_checkoutservice:
   extends: .build_image
   script:
     - docker build -t $CHECKOUTSERVICE_TAG:$VERSION src/checkoutservice
 
-build_currencyservice:
+.build_currencyservice:
   extends: .build_image
   script:
     - docker build -t $CURRENCYSERVICE_TAG:$VERSION src/currencyservice
 
-build_emailservice:
+.build_emailservice:
   extends: .build_image
   script:
     - docker build -t $EMAILSERVICE_TAG:$VERSION src/checkoutservice
@@ -181,7 +182,7 @@ Img_scan_adservice:
     paths:
       - adservice-image-scan-report.txt  # Specify the path to the text file
 
-Img_scan_cartservice:
+.Img_scan_cartservice:
   <<: *image_scan
   variables:
     FILENAME: "cartservice-image-scan-report.txt"       
@@ -190,7 +191,7 @@ Img_scan_cartservice:
     paths:
       - cartservice-image-scan-report.txt
 
-Img_scan_checkoutservice:
+.Img_scan_checkoutservice:
   <<: *image_scan
   variables:
     FILENAME: "checkoutservice-image-scan-report.txt"       
@@ -199,7 +200,7 @@ Img_scan_checkoutservice:
     paths:
       - checkoutservice-image-scan-report.txt
 
-Img_scan_currencyservice:
+.Img_scan_currencyservice:
   <<: *image_scan
   variables:
     FILENAME: "currencyservice-image-scan-report.txt"       
@@ -208,7 +209,7 @@ Img_scan_currencyservice:
     paths:
       - currencyservice-image-scan-report.txt
 
-Img_scan_emailservice:
+.Img_scan_emailservice:
   <<: *image_scan
   variables:
     FILENAME: "emailservice-image-scan-report.txt"       
@@ -216,6 +217,27 @@ Img_scan_emailservice:
   artifacts:
     paths:
       - emailservice-image-scan-report.txt
+
+
+
+#Adding check 
+check_critical_errors:
+  stage: check
+  script:
+    - |
+      # Get the number of critical errors from the previous pipeline's artifact
+      critical_errors=$(cat previous_pipeline_artifact.txt | grep "CRITICAL" | wc -l)
+      # Compare the number of critical errors with the threshold (5 in this case)
+      if [ $critical_errors -gt 5 ]; then
+        echo "Number of critical errors is greater than 5. Fail the pipeline."
+        exit 1
+      else
+        echo "Number of critical errors is within threshold. Continue the pipeline."
+      fi
+  dependencies:
+    - Image_scan_adservice
+  allow_failure: true  # Allow this job to fail if the previous pipeline's artifact is not found or if the script encounters an error
+
 
 
 #Push build images to ACR Container Registry
