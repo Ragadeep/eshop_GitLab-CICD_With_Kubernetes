@@ -73,7 +73,7 @@ variables:
   only:
     - main
 
-sast:
+.sast:
   stage: test
   tags:
     - build
