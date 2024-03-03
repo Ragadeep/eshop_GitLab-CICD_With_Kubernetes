@@ -78,7 +78,7 @@ variables:
   tags:
     - build
     - microservices
-include:
+.include:
   - template: Auto-DevOps.gitlab-ci.yml
 
 .build_image:
