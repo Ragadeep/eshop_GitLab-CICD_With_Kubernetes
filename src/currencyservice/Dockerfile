@@ -22,7 +22,8 @@ FROM base as builder
 #    python \
 #    make \
 #    g++
-RUN apt update && apt install -y python3 make g++
+RUN apk update && \
+    apk add --no-cache python3 make g++
 
 WORKDIR /usr/src/app
 
