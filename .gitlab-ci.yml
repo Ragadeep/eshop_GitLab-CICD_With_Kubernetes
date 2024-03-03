@@ -95,7 +95,7 @@ Trivy_file_scan:
     - trivy fs . 
   artifacts:
     reports:
-      file_scanning: trivy-file-scanning-report.json
+      container_scanning: trivy-file-scanning-report.json
 
 .build_image:
   stage: build
