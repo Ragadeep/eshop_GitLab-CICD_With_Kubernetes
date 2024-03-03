@@ -87,7 +87,7 @@ variables:
   - template: Auto-DevOps.gitlab-ci.yml
 
 #File Scan with Trivy
-Trivy_file_scan:
+.Trivy_file_scan:
   stage: filescan
   image:
     name: aquasec/trivy:latest
@@ -170,9 +170,9 @@ build_adservice:
     FILENAME: ""           # Declare file name variable dynamically
     IMAGE: ""              # Declare image dynamically
   script:
-    - trivy $IMAGE | tee $FILENAME  # Redirect and display output
+    - trivy image $IMAGE | tee $FILENAME  # Redirect and display output
 
-Img_scan_adservice:
+.Img_scan_adservice:
   <<: *image_scan
   variables:
     FILENAME: "adservice-image-scan-report.txt"           # Declare file name variable
