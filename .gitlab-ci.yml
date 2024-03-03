@@ -93,6 +93,9 @@ Trivy_file_scan:
     entrypoint: [""]
   script:
     - trivy fs .
+  artifacts:
+    reports:
+      artifacts: trivy-filescan-report.json
 
 .build_image:
   stage: build
