@@ -94,8 +94,8 @@ Trivy_file_scan:
   script:
     - trivy fs .
   artifacts:
-    reports:
-      artifacts: trivy-filescan-report.json
+    paths:
+      - trivy-filescan-report.json
 
 .build_image:
   stage: build
