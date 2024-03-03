@@ -319,7 +319,7 @@ check_critical_errors:
 
 
 #Push build images to ACR Container Registry
-push_image: &push_image
+.push_image: &push_image
   stage: push
   tags:
     - build
