@@ -28,6 +28,7 @@ stages:
 - test
 - filescan
 - build
+- imagescan
 - push
 - deploy
 - review
@@ -85,7 +86,7 @@ variables:
 .include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-#File Scan
+#File Scan with Trivy
 Trivy_file_scan:
   stage: filescan
   image:
@@ -97,6 +98,7 @@ Trivy_file_scan:
     paths:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
+#build docker images.
 .build_image:
   stage: build
   tags:
@@ -158,7 +160,29 @@ build_adservice:
   script:
     - docker build -t $SHIPPINGSERVICE_TAG:$VERSION src/shippingservice
 
+#Image scanning with Trivy
+.Trivy_image_scan: &image_scan
+  stage: imagescan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  variables:
+    FILENAME: ""           # Declare file name variable dynamically
+    IMAGE: ""              # Declare image dynamically
+  script:
+    - trivy $IMAGE | tee $FILENAME  # Redirect and display output
 
+Img_scan_adservice:
+  <<: *image_scan
+  variables:
+    FILENAME: "adservice-image-scan-report.txt"           # Declare file name variable
+    IMAGE: "$ADSERVICE_TAG:$VERSION"
+  artifacts:
+    paths:
+      - trivy-file-scanning-report.txt  # Specify the path to the text file
+
+
+#Push build images to ACR Container Registry
 .push_image: &push_image
   stage: push
   tags:
