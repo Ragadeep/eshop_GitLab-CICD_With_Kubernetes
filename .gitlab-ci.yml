@@ -102,10 +102,11 @@ variables:
 #build docker images.
 build:
   stage: build
-  include:
-    - project: 'eshop'
-      ref: main
-      file: 'build.yml'
+  tags:
+    - build
+    - microservices
+.include:
+  - local: build.yml
 
 
 #Image scanning with Trivy
