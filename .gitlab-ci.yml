@@ -189,7 +189,7 @@ image_scan_adservice:
   services:
     - docker:dind
   script:
-    - trivy image $ADSERVICE_TAG:$VERSION
+    - trivy image $ADSERVICE_TAG:$VERSION    #
 
 
 #Push build images to ACR Container Registry
