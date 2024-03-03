@@ -14,10 +14,11 @@ workflow:
 
 before_script:
   - |
-    if [ "$(docker ps -aq --filter status=exited | wc -l)" -gt 0 ]; then
-      docker ps -aq --filter status=exited | xargs docker rm
+    # Delete Docker images
+    if [ "$(docker images -q | wc -l)" -gt 0 ]; then
+      docker rmi $(docker images -q)
     else
-      echo "No exited containers to remove."
+      echo "No Docker images to delete."
     fi
 
 
@@ -123,7 +124,7 @@ build_adservice:
   before_script:
     - docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY
 
-push_adservice:
+.push_adservice:
   <<: *push_image
   script:
     - docker tag $IMAGE_TAG:$CI_COMMIT_REF_SLUG $IMAGE_TAG:$VERSION
