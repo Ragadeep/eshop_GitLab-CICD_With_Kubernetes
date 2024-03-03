@@ -135,8 +135,11 @@ variables:
 #deploy to kubernetes
 deploy_to_kubernetes:
   stage: deploy
-# image: bitnami/kubectl:latest
+  tags:
+    - build
+    - microservices
   script:
+    - chmod 600 chmod 600 /path/to/private_key.pem
     - ssh -v -i $kubelogin raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
