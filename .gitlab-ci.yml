@@ -181,15 +181,13 @@ build_adservice:
     paths:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
-Image_scan_adservice:
+image_scan_adservice:
   stage: imagescan
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
-  volumes:
-    - "/var/run/docker.sock:/var/run/docker.sock"  # Mount Docker socket
   script:
-    - trivy image $ADSERVICE_TAG:$VERSION 
+    - trivy image 23961cbcf0bf
 
 
 #Push build images to ACR Container Registry
