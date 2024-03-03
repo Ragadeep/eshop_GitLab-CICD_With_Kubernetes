@@ -39,8 +39,7 @@ stages:
 - cleanup
 
 variables:
-  #VERSION: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
-  VERSION: $CI_COMMIT_REF_SLUG
+  VERSION: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
   DOCKER_REGISTRY: eshopimages.azurecr.io
   ADSERVICE_TAG: eshopimages.azurecr.io/eshop/adservice
   CARTSERVICE_TAG: eshopimages.azurecr.io/eshop/cartservice
@@ -127,13 +126,7 @@ build_adservice:
 push_adservice:
   <<: *push_image
   script:
-    - docker tag $IMAGE_TAG:$CI_COMMIT_REF_SLUG $IMAGE_TAG:$VERSION
-    - docker push $ADSERVICE_TAG:$CI_COMMIT_REF_SLUG
     - docker push $ADSERVICE_TAG:$VERSION
-
-#docker tag $IMAGE_TAG:$CI_COMMIT_REF_SLUG $IMAGE_TAG:$VERSION
-#docker push $IMAGE_TAG:$CI_COMMIT_REF_SLUG
-#docker push $IMAGE_TAG:$VERSION
 
 .push_cartservice:
   <<: *push_image
