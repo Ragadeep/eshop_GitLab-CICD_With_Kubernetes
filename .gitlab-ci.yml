@@ -90,6 +90,7 @@ Trivy_file_scan:
   stage: filescan
   image:
     name: aquasec/trivy:latest
+    entrypoint: [""]
   script:
     - trivy fs .
 
