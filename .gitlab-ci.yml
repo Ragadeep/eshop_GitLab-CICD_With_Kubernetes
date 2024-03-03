@@ -87,7 +87,7 @@ variables:
   - template: Auto-DevOps.gitlab-ci.yml
 
 #File Scan with Trivy
-Trivy_file_scan:
+.Trivy_file_scan:
   stage: filescan
   image:
     name: aquasec/trivy:latest
@@ -187,7 +187,7 @@ image_scan_adservice:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy image 23961cbcf0bf
+    - trivy image eshopimages.azurecr.io/eshop/shippingservice:main-49
 
 
 #Push build images to ACR Container Registry
