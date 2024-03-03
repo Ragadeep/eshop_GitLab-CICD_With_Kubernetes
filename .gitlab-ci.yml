@@ -12,7 +12,7 @@ workflow:
       when: never
     - when: always
 
-.before_script:
+before_script:
   - |
     if [ "$(docker ps -aq --filter status=exited | wc -l)" -gt 0 ]; then
       docker ps -aq --filter status=exited | xargs docker rm
