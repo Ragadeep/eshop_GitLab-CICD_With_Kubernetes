@@ -235,7 +235,7 @@ check_critical_errors:
         echo "Number of critical errors is within threshold. Continue the pipeline."
       fi
   dependencies:
-    - Image_scan_adservice
+    - Img_scan_adservice
   allow_failure: true  # Allow this job to fail if the previous pipeline's artifact is not found or if the script encounters an error
 
 
