@@ -138,6 +138,8 @@ deploy_to_kubernetes:
   tags:
     - build
     - microservices
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
