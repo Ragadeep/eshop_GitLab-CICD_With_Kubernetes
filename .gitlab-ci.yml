@@ -144,6 +144,6 @@ deploy_to_kubernetes:
     - eval $(ssh-agent)
     - ssh-add ~/.ssh/id_rsa
   script:
-    - ssh raga@13.71.64.229
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
