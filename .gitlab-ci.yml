@@ -133,7 +133,7 @@ variables:
 
 
 #deploy to kubernetes
-deploy_to_kubernetes:
+.deploy_to_kubernetes2:
   stage: deploy
   tags:
     - build
@@ -143,4 +143,17 @@ deploy_to_kubernetes:
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
+
+deploy_to_kubernetes:
+  stage: deploy
+  image: alpine
+  before_script:
+    - apk add openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval $(ssh-agent)
+    - ssh-add ~/.ssh/id_rsa
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@13.71.64.229
 
