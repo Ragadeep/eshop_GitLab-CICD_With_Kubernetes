@@ -100,9 +100,9 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-.include:
+include:
   - local: 'build.yml'
-  - local: 'imagescan.yml'
+#  - local: 'imagescan.yml'
   - local: 'push.yml'
 
 
