@@ -143,11 +143,7 @@ deploy_to_kubernetes:
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "rm -rf /home/raga/kube/kubernetes-manifests && mkdir -p /home/raga/kube && exit"
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY &&
-        for file in ~/kube/kubernetes-manifests/*.yaml; do
-          sed -i \"s/\$ADSERVICE_TAG:\$VERSION/${ADSERVICE_TAG}:${VERSION}/g\" \$file &&
-          kubectl apply -f \$file;
-        done"
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP " docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY && for file in ~/kube/kubernetes-manifests/*.yaml; do sed -i \"s/\$ADSERVICE_TAG:\$VERSION/${ADSERVICE_TAG}:${VERSION}/g\" \$file && kubectl apply -f \$file; done"
+
 
 
