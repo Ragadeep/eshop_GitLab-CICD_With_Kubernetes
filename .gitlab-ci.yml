@@ -145,7 +145,7 @@ deploy_to_kubernetes:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
       docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY &&
       for file in ~/kube/kubernetes-manifests/*.yaml; do
-        sed -i 's/\$ADSERVICE_TAG:$VERSION/$ADSERVICE_TAG:$VERSION/g' \$file &&
+        sed -i \"s/\$ADSERVICE_TAG:\$VERSION/\$ADSERVICE_TAG:\$VERSION/g\" \$file &&
         kubectl apply -f \$file;
       done"
 
