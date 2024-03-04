@@ -141,7 +141,7 @@ deploy_to_kubernetes:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
-    - sch -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP ./kubernetes-manifests ~/kube
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP ./kubernetes-manifests ~/kube
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
         docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY && 
         for file in ~/Kubernetes-manifests/*.yml; 
