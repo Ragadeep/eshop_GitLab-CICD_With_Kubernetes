@@ -133,7 +133,7 @@ variables:
 
 
 #deploy to kubernetes
-.deploy_to_kubernetes2:
+deploy_to_kubernetes2:
   stage: deploy
   tags:
     - build
@@ -144,7 +144,7 @@ variables:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
-deploy_to_kubernetes:
+.deploy_to_kubernetes:
   stage: deploy
   image: alpine
   before_script:
