@@ -28,7 +28,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: shippingservice
+        image: $SHIPPINGSERVICE_TAG:$VERSION
         ports:
         - containerPort: 50051
         env:

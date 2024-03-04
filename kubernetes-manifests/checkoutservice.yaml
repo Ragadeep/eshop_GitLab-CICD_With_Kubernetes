@@ -28,7 +28,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: checkoutservice
+          image: $CHECKOUTSERVICE_TAG:$VERSION
           ports:
           - containerPort: 5050
           readinessProbe:
