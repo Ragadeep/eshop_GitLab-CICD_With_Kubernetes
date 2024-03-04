@@ -138,11 +138,12 @@ deploy_to_kubernetes:
   image: alpine
   before_script:
     - apk add openssh-client
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval $(ssh-agent)
+    - ssh-add ~/.ssh/id_rsa
   script:
-    - ssh -i $SSH_PRIVATE_KEY raga@13.71.64.229
+    - ssh raga@13.71.64.229
   # - kubectl apply -f path/to/kubernetes/manifests
 
