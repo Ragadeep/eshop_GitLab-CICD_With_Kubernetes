@@ -144,7 +144,7 @@ deploy_to_kubernetes:
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube  
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
         docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY && 
-        for file in kube/kubernetes-manifests/*.yml; 
+        for file in kube/kubernetes-manifests/adservice.yml; 
           do kubectl apply -f \$file; 
         done"
 
