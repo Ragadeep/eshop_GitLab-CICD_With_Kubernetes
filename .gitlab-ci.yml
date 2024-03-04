@@ -141,16 +141,12 @@ deploy_to_kubernetes:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY 
   script:
-    # Copy the adservice.yaml file to the Kubernetes server
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./kubernetes-manifests/adservice.yaml raga@$KUBE_SERVER_IP:/home/raga/kube
-
-    # SSH into the Kubernetes server and update the image tag in the adservice.yaml file
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        sed -i 's|\$ADSERVICE_TAG:\$VERSION|${ADSERVICE_TAG}:${VERSION}|g' /home/raga/kube/adservice.yaml"
-
-    # Apply the updated adservice.yaml file
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        kubectl apply -f /home/raga/kube/adservice.yaml"
+    # Copy Kubernetes manifests to the target server
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
+    # Login to Docker registry
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "docker login -u $ACR_USER -p $ACR_PASSWORD $DOCKER_REGISTRY"
+    # Update the image references in YAML files and apply them to Kubernetes
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "for file in ~/kube/kubernetes-manifests/*.yaml; do sed -i \"s/\$ADSERVICE_TAG:\$VERSION/${ADSERVICE_TAG}:${VERSION}/g\" \$file && kubectl apply -f \$file; done"
 
         
 
