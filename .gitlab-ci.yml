@@ -141,7 +141,7 @@ deploy_job:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY 
   script:
-    - sed -i 's/old_value/$NEW_VALUE/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
+    - sed -i 's/VERSION/$VERSION/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
   variables:                    
     VERSION: "$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID"
