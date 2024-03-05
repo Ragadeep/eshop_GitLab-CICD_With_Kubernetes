@@ -156,7 +156,7 @@ deploy_job2:
     - chmod 400 $SSH_PRIVATE_KEY 
   script:
     #- sed -i "s/\$ADSERVICE_TAG:.\+/\$ADSERVICE_TAG:$ADSERVICE_TAG/" ./kubernetes-manifests/* 
-    - sed -i "s/\$ADSERVICE_TAG:.*/\$ADSERVICE_TAG:$ADSERVICE_TAG/" ./kubernetes-manifests/*
+    - sed -i "s|\$ADSERVICE_TAG:.*|\$ADSERVICE_TAG:$ADSERVICE_TAG|g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
 
