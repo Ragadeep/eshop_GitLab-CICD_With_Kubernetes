@@ -133,7 +133,7 @@ variables:
 
 
 
-.deploy_job2:
+deploy_job2:
   stage: deploy
   tags:
     - build
