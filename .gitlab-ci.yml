@@ -145,7 +145,7 @@ deploy_to_kubernetes:
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
     
     # Update the image references in YAML files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < ./script/update_image_references.sh.sh
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < ./script/update_image_references.sh
 
     # Execute the acr_secret.sh script remotely without copying
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < ./script/acr_secret.sh
