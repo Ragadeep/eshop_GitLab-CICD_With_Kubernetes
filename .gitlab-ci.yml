@@ -158,6 +158,7 @@ deploy_job2:
     #- sed -i "s|\$ADSERVICE_TAG:.*|\$ADSERVICE_TAG:$ADSERVICE_TAG|g" ./kubernetes-manifests/*
     #- sed -i "s|\$ADSERVICE_TAG:[^ ]*|\$ADSERVICE_TAG:$ADSERVICE_TAG|g" ./kubernetes-manifests/*
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
+    - sed -i "s/\$CARTSERVICE_TAG/$CARTSERVICE_TAG/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
 
