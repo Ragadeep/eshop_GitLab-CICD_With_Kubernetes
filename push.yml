@@ -10,53 +10,64 @@ push_adservice:
   <<: *push_image
   script:
     - docker push $ADSERVICE_TAG:$VERSION
+    - docker push $ADSERVICE_TAG:latest
 
 push_cartservice:
   <<: *push_image
   script:
     - docker push $CARTSERVICE_TAG:$VERSION
+    - docker push $CARTSERVICE_TAG:latest
 
 push_checkoutservice:
   <<: *push_image
   script:
     - docker push $CHECKOUTSERVICE_TAG:$VERSION
+    - docker push $CHECKOUTSERVICE_TAG:latest
 
 push_currencyservice:
   <<: *push_image
   script:
     - docker push $CURRENCYSERVICE_TAG:$VERSION
+    - docker push $CURRENCYSERVICE_TAG:latest
 
 push_emailservice:
   <<: *push_image
   script:
     - docker push $EMAILSERVICE_TAG:$VERSION
+    - docker push $EMAILSERVICE_TAG:latest
 
 push_frontend:
   <<: *push_image
   script:
     - docker push $FRONTEND_TAG:$VERSION
+    - docker push $FRONTEND_TAG:latest
 
 push_loadgenerator:
   <<: *push_image
   script:
     - docker push $LOADGENERATOR_TAG:$VERSION
+    - docker push $LOADGENERATOR_TAG:latest
 
 push_paymentservice:
   <<: *push_image
   script:
     - docker push $PAYMENTSERVICE_TAG:$VERSION
+    - docker push $PAYMENTSERVICE_TAG:latest
 
 push_productcatalogservice:
   <<: *push_image
   script:
     - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
+    - docker push $PRODUCTCATALOGSERVICE_TAG:latest
 
 push_recommendationservice:
   <<: *push_image
   script:
     - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
+    - docker push $RECOMMENDATIONSERVICE_TAG:latest
 
 push_shippingservice:
   <<: *push_image
   script:
     - docker push $SHIPPINGSERVICE_TAG:$VERSION
+    - docker push $SHIPPINGSERVICE_TAG:latest

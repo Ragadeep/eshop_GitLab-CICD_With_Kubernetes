@@ -58,6 +58,8 @@ spec:
           limits:
             cpu: 200m
             memory: 450Mi
+      imagePullSecrets:
+      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

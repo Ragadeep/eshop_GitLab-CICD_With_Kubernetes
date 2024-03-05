@@ -51,6 +51,8 @@ spec:
           periodSeconds: 10
           exec:
             command: ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
+      imagePullSecrets:
+      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
