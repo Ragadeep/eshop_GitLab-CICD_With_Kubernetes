@@ -133,7 +133,7 @@ include:
 
 
 #deploy to kubernetes
-.deploy_to_kubernetes:
+deploy_to_kubernetes:
   stage: deploy
   tags:
     - build
