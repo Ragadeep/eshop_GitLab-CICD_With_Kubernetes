@@ -155,12 +155,12 @@ variables:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY 
   script:
-    - sed -i 's/VERSION/$VERSION/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
+    - sed -i "s/\$ADSERVICE_TAG:.\+/\$ADSERVICE_TAG:$ADSERVICE_TAG/" ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
 
 
-deploy_jobs:
+.deploy_jobs:
   stage: deploy
   tags:
     - build
