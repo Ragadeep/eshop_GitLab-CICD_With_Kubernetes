@@ -100,7 +100,7 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-include:
+.include:
   - local: 'build.yml'
 #  - local: 'imagescan.yml'
   - local: 'push.yml'
@@ -133,7 +133,7 @@ include:
 
 
 #deploy to kubernetes
-deploy_to_kubernetes:
+.deploy_to_kubernetes:
   stage: deploy
   tags:
     - build
@@ -167,7 +167,75 @@ deploy_to_kubernetes:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
         kubectl apply -f ~/kube/kubernetes-manifests/"
 
-        
+#deploy to kubernetes
+.deploy_to_kubernetes2:
+  stage: deploy
+  tags:
+    - build
+    - microservices
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY 
+    - export VERSION=$VERSION
+    - export ADSERVICE_TAG=$ADSERVICE_TAG
+    - export CARTSERVICE_TAG=$CARTSERVICE_TAG
+    - export CHECKOUTSERVICE_TAG=CHECKOUTSERVICE_TAG
+    - export CURRENCYSERVICE_TAG=$CURRENCYSERVICE_TAG
+    - export EMAILSERVICE_TAG=$EMAILSERVICE_TAG
+    - export FRONTEND_TAG=$FRONTEND_TAG
+    - export LOADGENERATOR_TAG=$LOADGENERATOR_TAG
+    - export PAYMENTSERVICE_TAG=$PAYMENTSERVICE_TAG
+    - export PRODUCTCATALOGSERVICE_TAG=$PRODUCTCATALOGSERVICE_TAG
+    - export RECOMMENDATIONSERVICE_TAG=$RECOMMENDATIONSERVICE_TAG
+    - export SHIPPINGSERVICE_TAG=$SHIPPINGSERVICE_TAG
+  script:
+    # Copy Kubernetes manifests to the target server
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
+
+    # Copy update_image_references.sh script to the target server
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/update_image_references.sh raga@$KUBE_SERVER_IP:/home/raga/kube/update_image_references.sh
+    
+    #Give Permission to bash file
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'chmod +x /home/raga/kube/update_image_references.sh'
+
+    # Execute the script on the target server after replacing variables
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
+        export VERSION=$VERSION &&
+        export ADSERVICE_TAG=$ADSERVICE_TAG &&
+        "
+
+    # secure copy secret to remote server
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh
+
+    # Execute the acr_secret.sh script remotely
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/acr_secret.sh'
+    
+    # Apply Kubernetes manifests
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
+        kubectl apply -f ~/kube/kubernetes-manifests/" 
+
+deploy_job:
+  stage: deploy
+  script:
+    - sed -i 's/old_value/$NEW_VALUE/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
+  variables:                    
+    VERSION: "$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID"
+    DOCKER_REGISTRY: "eshopimages.azurecr.io"
+    ADSERVICE_TAG: "eshopimages.azurecr.io/eshop/adservice"
+    CARTSERVICE_TAG: "eshopimages.azurecr.io/eshop/cartservice"
+    CHECKOUTSERVICE_TAG: "eshopimages.azurecr.io/eshop/checkoutservice"
+    CURRENCYSERVICE_TAG: "eshopimages.azurecr.io/eshop/currencyservice"
+    EMAILSERVICE_TAG: "eshopimages.azurecr.io/eshop/emailservice"
+    FRONTEND_TAG: "eshopimages.azurecr.io/eshop/frontend"
+    LOADGENERATOR_TAG: "eshopimages.azurecr.io/eshop/loadgenerator"
+    PAYMENTSERVICE_TAG: "eshopimages.azurecr.io/eshop/paymentservice"
+    PRODUCTCATALOGSERVICE_TAG: "eshopimages.azurecr.io/eshop/productcatalogservice"
+    RECOMMENDATIONSERVICE_TAG: "eshopimages.azurecr.io/eshop/recommendationservice"
+    SHIPPINGSERVICE_TAG: "eshopimages.azurecr.io/eshop/shippingservice"
+  only:
+    - master  # Define the branch to trigger this job
+
+
 
 
 
