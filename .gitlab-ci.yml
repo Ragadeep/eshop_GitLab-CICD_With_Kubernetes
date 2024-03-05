@@ -170,10 +170,7 @@ deploy_jobs:
   script:
     - # secure copy secret to remote server
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        kubectl create secret docker-registry acr-secret \
-          --docker-server=eshopimages.azurecr.io \
-          --docker-username=eshopimages \
-          --docker-password=jvOvtdM20HNanYNgRO4G3TP7hACQX3454/GaQ0icWR+ACRAMue0q"
+        kubectl create secret docker-registry acr-secret --docker-server=eshopimages.azurecr.io --docker-username=eshopimages --docker-password=jvOvtdM20HNanYNgRO4G3TP7hACQX3454/GaQ0icWR+ACRAMue0q"
 
 
 
