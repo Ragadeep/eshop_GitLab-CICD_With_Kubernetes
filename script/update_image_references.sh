@@ -13,6 +13,9 @@ PRODUCTCATALOGSERVICE_TAG=${10}
 RECOMMENDATIONSERVICE_TAG=${11}
 SHIPPINGSERVICE_TAG=${12}
 
+echo "Version: $VERSION"
+echo "ADSERVICE_TAG: $ADSERVICE_TAG"
+
 # Update the image references in YAML files for multiple services
 for file in ~/kube/kubernetes-manifests/*.yaml; do
     # Update adservice image reference
