@@ -154,7 +154,7 @@ include:
     #- ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/update_image_references.sh "${VERSION}" "${ADSERVICE_TAG}"'
 
     # Execute the script on the target server after replacing variables
-    ssh -vvv -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < <(envsubst < /home/raga/kube/update_image_references_template.sh)
+    - ssh -vvv -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < <(envsubst < /home/raga/kube/update_image_references_template.sh)
 
 
     # secure copy secret to remote server
