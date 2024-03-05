@@ -155,8 +155,6 @@ deploy_job:
     PRODUCTCATALOGSERVICE_TAG: "eshopimages.azurecr.io/eshop/productcatalogservice"
     RECOMMENDATIONSERVICE_TAG: "eshopimages.azurecr.io/eshop/recommendationservice"
     SHIPPINGSERVICE_TAG: "eshopimages.azurecr.io/eshop/shippingservice"
-  only:
-    - master  # Define the branch to trigger this job
 
 
 
