@@ -151,7 +151,9 @@ deploy_to_kubernetes:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'chmod +x /home/raga/kube/update_image_references.sh'
 
     # Update the image references in YAML files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/update_image_references.sh "$VERSION" "$ADSERVICE_TAG" "$CARTSERVICE_TAG" "$CHECKOUTSERVICE_TAG" "$CURRENCYSERVICE_TAG" "$EMAILSERVICE_TAG" "$FRONTEND_TAG" "$LOADGENERATOR_TAG" "$PAYMENTSERVICE_TAG" "$PRODUCTCATALOGSERVICE_TAG" "$RECOMMENDATIONSERVICE_TAG" "$SHIPPINGSERVICE_TAG"'
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' << EOF
+        /home/raga/kube/update_image_references.sh "$VERSION" "$ADSERVICE_TAG" "$CARTSERVICE_TAG" "$CHECKOUTSERVICE_TAG" "$CURRENCYSERVICE_TAG" "$EMAILSERVICE_TAG" "$FRONTEND_TAG" "$LOADGENERATOR_TAG" "$PAYMENTSERVICE_TAG" "$PRODUCTCATALOGSERVICE_TAG" "$RECOMMENDATIONSERVICE_TAG" "$SHIPPINGSERVICE_TAG"
+      EOF
 
 
     # secure copy secret to remote server
