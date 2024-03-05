@@ -145,10 +145,13 @@ deploy_to_kubernetes:
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
     
     # Update the image references in YAML files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < ./script/update_image_references.sh
+  - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP './script/update_image_references.sh "$VERSION" "$ADSERVICE_TAG" "$CARTSERVICE_TAG" "$CHECKOUTSERVICE_TAG" "$CURRENCYSERVICE_TAG" "$EMAILSERVICE_TAG" "$FRONTEND_TAG" "$LOADGENERATOR_TAG" "$PAYMENTSERVICE_TAG" "$PRODUCTCATALOGSERVICE_TAG" "$RECOMMENDATIONSERVICE_TAG" "$SHIPPINGSERVICE_TAG"'
 
-    # Execute the acr_secret.sh script remotely without copying
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < ./script/acr_secret.sh
+    # secure copy secret to remote server
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh
+
+    # Execute the acr_secret.sh script remotely
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/acr_secret.sh'
     
     # Apply Kubernetes manifests
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
