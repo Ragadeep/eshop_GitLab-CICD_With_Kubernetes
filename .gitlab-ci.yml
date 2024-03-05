@@ -148,13 +148,10 @@ deploy_to_kubernetes:
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/update_image_references.sh raga@$KUBE_SERVER_IP:/home/raga/kube/update_image_references.sh
     
     #Give Permission to bash file
-    #- ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'chmod +x /home/raga/kube/update_image_references.sh'
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'chmod +x /home/raga/kube/update_image_references.sh'
 
     # Update the image references in YAML files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' <<EOF
-        chmod +x /home/raga/kube/update_image_references.sh
-        /home/raga/kube/update_image_references.sh "$VERSION" "$ADSERVICE_TAG" "$CARTSERVICE_TAG" "$CHECKOUTSERVICE_TAG" "$CURRENCYSERVICE_TAG" "$EMAILSERVICE_TAG" "$FRONTEND_TAG" "$LOADGENERATOR_TAG" "$PAYMENTSERVICE_TAG" "$PRODUCTCATALOGSERVICE_TAG" "$RECOMMENDATIONSERVICE_TAG" "$SHIPPINGSERVICE_TAG"
-      EOF
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/update_image_references.sh {{ var.VERSION }} {{ var.ADSERVICE_TAG }} {{ var.CARTSERVICE_TAG }} {{ var.CHECKOUTSERVICE_TAG }} {{ var.CURRENCYSERVICE_TAG }} {{ var.EMAILSERVICE_TAG }} {{ var.FRONTEND_TAG }} {{ var.LOADGENERATOR_TAG }} {{ var.PAYMENTSERVICE_TAG }} {{ var.PRODUCTCATALOGSERVICE_TAG }} {{ var.RECOMMENDATIONSERVICE_TAG }} {{ var.SHIPPINGSERVICE_TAG }}'
 
 
     # secure copy secret to remote server
