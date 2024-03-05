@@ -215,6 +215,9 @@ variables:
 
 deploy_job:
   stage: deploy
+  tags:
+    - build
+    - microservices
   script:
     - sed -i 's/old_value/$NEW_VALUE/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
