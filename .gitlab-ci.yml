@@ -138,27 +138,12 @@ deploy_job2:
   tags:
     - build
     - microservices
-  variables:                    
-    VERSION: "$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID"
-    DOCKER_REGISTRY: "eshopimages.azurecr.io"
-    ADSERVICE_TAG: "eshopimages.azurecr.io/eshop/adservice"
-    CARTSERVICE_TAG: "eshopimages.azurecr.io/eshop/cartservice"
-    CHECKOUTSERVICE_TAG: "eshopimages.azurecr.io/eshop/checkoutservice"
-    CURRENCYSERVICE_TAG: "eshopimages.azurecr.io/eshop/currencyservice"
-    EMAILSERVICE_TAG: "eshopimages.azurecr.io/eshop/emailservice"
-    FRONTEND_TAG: "eshopimages.azurecr.io/eshop/frontend"
-    LOADGENERATOR_TAG: "eshopimages.azurecr.io/eshop/loadgenerator"
-    PAYMENTSERVICE_TAG: "eshopimages.azurecr.io/eshop/paymentservice"
-    PRODUCTCATALOGSERVICE_TAG: "eshopimages.azurecr.io/eshop/productcatalogservice"
-    RECOMMENDATIONSERVICE_TAG: "eshopimages.azurecr.io/eshop/recommendationservice"
-    SHIPPINGSERVICE_TAG: "eshopimages.azurecr.io/eshop/shippingservice"
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY 
   script:
     #- sed -i "s|\$ADSERVICE_TAG:.*|\$ADSERVICE_TAG:$ADSERVICE_TAG|g" ./kubernetes-manifests/*
     #- sed -i "s|\$ADSERVICE_TAG:[^ ]*|\$ADSERVICE_TAG:$ADSERVICE_TAG|g" ./kubernetes-manifests/*
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
-    - sed -i "s/\$CARTSERVICE_TAG/$CARTSERVICE_TAG/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
 
