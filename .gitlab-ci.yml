@@ -138,11 +138,6 @@ deploy_job:
   tags:
     - build
     - microservices
-  before_script:
-    - chmod 400 $SSH_PRIVATE_KEY 
-  script:
-    - sed -i 's/VERSION/$VERSION/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
   variables:                    
     VERSION: "$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID"
     DOCKER_REGISTRY: "eshopimages.azurecr.io"
@@ -157,6 +152,11 @@ deploy_job:
     PRODUCTCATALOGSERVICE_TAG: "eshopimages.azurecr.io/eshop/productcatalogservice"
     RECOMMENDATIONSERVICE_TAG: "eshopimages.azurecr.io/eshop/recommendationservice"
     SHIPPINGSERVICE_TAG: "eshopimages.azurecr.io/eshop/shippingservice"
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY 
+  script:
+    - sed -i 's/VERSION/$VERSION/g' ./kubernetes-manifests/*  # Replace old_value with NEW_VALUE in files
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
 
 
