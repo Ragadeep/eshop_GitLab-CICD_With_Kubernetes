@@ -153,7 +153,8 @@ deploy_to_kubernetes:
     # Update the image references in YAML files
     #- ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash /home/raga/kube/update_image_references.sh "${VERSION}" "${ADSERVICE_TAG}"'
 
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < <(envsubst < ./script/update_image_references_template.sh)
+    # Execute the script on the target server after replacing variables
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < <(envsubst < /home/raga/kube/update_image_references_template.sh)
 
     # secure copy secret to remote server
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh
