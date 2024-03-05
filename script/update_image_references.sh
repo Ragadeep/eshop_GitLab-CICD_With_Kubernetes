@@ -1,8 +1,12 @@
 #!/bin/bash
 
+echo "ADSERVICE_TAG: $ADSERVICE_TAG"
+echo "VERSION: $VERSION"
+
 # Update the image references in YAML files for multiple services
 for file in ~/kube/kubernetes-manifests/*.yaml; do
     # Update adservice image reference
+    echo "Processing file: $file"
     sed -i "s/\$ADSERVICE_TAG:\$VERSION/${ADSERVICE_TAG}:${VERSION}/g" $file
     # Update cartservice image reference
     sed -i "s/\$CARTSERVICE_TAG:\$VERSION/${CARTSERVICE_TAG}:${VERSION}/g" $file
