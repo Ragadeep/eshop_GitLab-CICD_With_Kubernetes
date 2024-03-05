@@ -9,65 +9,76 @@
 push_adservice:
   <<: *push_image
   script:
+    - docker tag $ADSERVICE_TAG:$VERSION $ADSERVICE_TAG:latest
     - docker push $ADSERVICE_TAG:$VERSION
     - docker push $ADSERVICE_TAG:latest
 
 push_cartservice:
   <<: *push_image
   script:
+    - docker tag $CARTSERVICE_TAG:$VERSION $CARTSERVICE_TAG:latest
     - docker push $CARTSERVICE_TAG:$VERSION
     - docker push $CARTSERVICE_TAG:latest
 
 push_checkoutservice:
   <<: *push_image
   script:
+    - docker tag $CHECKOUTSERVICE_TAG:$VERSION $CHECKOUTSERVICE_TAG:latest
     - docker push $CHECKOUTSERVICE_TAG:$VERSION
     - docker push $CHECKOUTSERVICE_TAG:latest
 
 push_currencyservice:
   <<: *push_image
   script:
+    - docker tag $CURRENCYSERVICE_TAG:$VERSION $CURRENCYSERVICE_TAG:latest
     - docker push $CURRENCYSERVICE_TAG:$VERSION
     - docker push $CURRENCYSERVICE_TAG:latest
 
 push_emailservice:
   <<: *push_image
   script:
+    - docker tag $EMAILSERVICE_TAG:$VERSION $EMAILSERVICE_TAG:latest
     - docker push $EMAILSERVICE_TAG:$VERSION
     - docker push $EMAILSERVICE_TAG:latest
 
 push_frontend:
   <<: *push_image
   script:
+    - docker tag $FRONTEND_TAG:$VERSION $FRONTEND_TAG:latest
     - docker push $FRONTEND_TAG:$VERSION
     - docker push $FRONTEND_TAG:latest
 
 push_loadgenerator:
   <<: *push_image
   script:
+    - docker tag $LOADGENERATOR_TAG:$VERSION $LOADGENERATOR_TAG:latest
     - docker push $LOADGENERATOR_TAG:$VERSION
     - docker push $LOADGENERATOR_TAG:latest
 
 push_paymentservice:
   <<: *push_image
   script:
+    - docker tag $PAYMENTSERVICE_TAG:$VERSION $PAYMENTSERVICE_TAG:latest
     - docker push $PAYMENTSERVICE_TAG:$VERSION
     - docker push $PAYMENTSERVICE_TAG:latest
 
 push_productcatalogservice:
   <<: *push_image
   script:
+    - docker tag $PRODUCTCATALOGSERVICE_TAG:$VERSION $PRODUCTCATALOGSERVICE_TAG:latest
     - docker push $PRODUCTCATALOGSERVICE_TAG:$VERSION
     - docker push $PRODUCTCATALOGSERVICE_TAG:latest
 
 push_recommendationservice:
   <<: *push_image
   script:
+    - docker tag $RECOMMENDATIONSERVICE_TAG:$VERSION $RECOMMENDATIONSERVICE_TAG:latest
     - docker push $RECOMMENDATIONSERVICE_TAG:$VERSION
     - docker push $RECOMMENDATIONSERVICE_TAG:latest
 
 push_shippingservice:
   <<: *push_image
   script:
+    - docker tag $SHIPPINGSERVICE_TAG:$VERSION $SHIPPINGSERVICE_TAG:latest
     - docker push $SHIPPINGSERVICE_TAG:$VERSION
     - docker push $SHIPPINGSERVICE_TAG:latest
