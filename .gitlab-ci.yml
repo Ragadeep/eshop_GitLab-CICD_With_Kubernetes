@@ -163,10 +163,56 @@ deploy_to_uat:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
 
 
+deploy_to_staging:
+  stage: deploy
+  environment:
+    name: staging
+  script:
+    # Deployment script for Staging environment
 
 
+deploy_to_production:
+  stage: deploy
+  environment:
+    name: production
+  script:
+    # Deployment script for Production environment
 
 
+# Manual approval step for production deployment
+production_approval:
+  stage: deploy
+  environment:
+    name: production
+    action: manual
+  rules:
+    - when: manual
+    - exists:
+        - $CI_COMMIT_TAG
+        - $CI_COMMIT_BRANCH
+  script:
+    # Notify manager for approval
+    - echo "Please approve the production deployment."
+
+
+# Add manager's email for notification
+notify_manager:
+  stage: deploy
+  environment:
+    name: production
+    action: manual
+  rules:
+    - when: manual
+    - exists:
+        - $CI_COMMIT_TAG
+        - $CI_COMMIT_BRANCH
+  before_script:
+    - source .env  # Load environment variables from the .env file
+  script:
+    # Notify manager for approval
+    - echo "Please approve the production deployment."
+    # Send email notification to the manager
+    - echo "$EMAIL_BODY" | mail -s "$EMAIL_SUBJECT" -r "$GITLAB_USER_EMAIL" "$MANAGER_EMAIL"
 
 
 
