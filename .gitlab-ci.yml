@@ -169,6 +169,7 @@ deploy_to_staging:
     name: staging
   script:
     # Deployment script for Staging environment
+    - echo "Staging"
 
 
 deploy_to_production:
@@ -177,6 +178,7 @@ deploy_to_production:
     name: production
   script:
     # Deployment script for Production environment
+    - echo "Production"
 
 
 # Manual approval step for production deployment
