@@ -30,7 +30,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: $FRONTEND_TAG:$VERSION
+          image: eshopimages.azurecr.io/eshop/frontend:$VERSION
           ports:
           - containerPort: 8080
           readinessProbe:

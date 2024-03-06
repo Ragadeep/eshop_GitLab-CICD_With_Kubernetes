@@ -28,7 +28,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: server
-          image: $CHECKOUTSERVICE_TAG:$VERSION
+          image: eshopimages.azurecr.io/eshop/checkoutservice:$VERSION
           ports:
           - containerPort: 5050
           readinessProbe:

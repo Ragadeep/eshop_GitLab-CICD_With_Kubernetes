@@ -28,7 +28,7 @@ spec:
       serviceAccountName: default
       containers:
       - name: server
-        image: $SHIPPINGSERVICE_TAG:$VERSION
+        image: eshopimages.azurecr.io/eshop/shippingservice:$VERSION
         ports:
         - containerPort: 50051
         env:

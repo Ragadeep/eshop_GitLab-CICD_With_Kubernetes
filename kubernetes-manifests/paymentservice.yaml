@@ -29,7 +29,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: $PAYMENTSERVICE_TAG:$VERSION
+        image: eshopimages.azurecr.io/eshop/paymentservice:$VERSION
         ports:
         - containerPort: 50051
         env:
