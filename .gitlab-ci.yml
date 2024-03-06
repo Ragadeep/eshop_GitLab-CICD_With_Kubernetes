@@ -32,6 +32,9 @@ stages:
 - check
 - push
 - deploy
+- deploy-uat
+- deploy-staging
+- deploy-prod
 - review
 - dast
 - staging
@@ -132,8 +135,48 @@ include:
 # allow_failure: true
 
 
+#Deploy Job
+deploy_to_uat:
+  stage: deploy-uat
+  tags:
+    - build
+    - microservices
+  environment:
+    name: uat
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY
+  script:
+    # Copy Kubernetes manifests to the target server dynamically changing version
+    - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
-deploy_job:
+    # secure copy secret to remote server.
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
+    # Giving permissions to secret and running it.
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
+
+    # Giving Permission to Kubernetes manifests files
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
+        chmod +x ~/kube/kubernetes-manifests/*"
+
+    # Apply Kubernetes manifests
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.deploy_job:
   stage: deploy
   tags:
     - build
