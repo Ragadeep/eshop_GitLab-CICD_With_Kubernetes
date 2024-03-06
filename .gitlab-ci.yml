@@ -100,7 +100,7 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-include:
+.include:
   - local: 'build.yml'
 #  - local: 'imagescan.yml'
   - local: 'push.yml'
@@ -148,7 +148,11 @@ deploy_job2:
     # secure copy secret to remote server
     #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh    
     #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < /home/raga/kube/acr_secret.sh
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY sudo raga@$KUBE_SERVER_IP 'bash -s' < /home/raga/kube/acr_secret.sh
+    #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY sudo raga@$KUBE_SERVER_IP 'bash -s' < /home/raga/kube/acr_secret.sh
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY \
+        ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
+        ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY \
+        sudo raga@$KUBE_SERVER_IP 'chmod +x /home/raga/kube/acr_secret.sh && bash /home/raga/kube/acr_secret.sh'
 
 
 .deploy_jobs:
