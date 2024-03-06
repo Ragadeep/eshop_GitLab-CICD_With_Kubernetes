@@ -148,7 +148,7 @@ deploy_job:
     # secure copy secret to remote server.
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
     # Giving permissions to secret and running it.
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh  && kubectl apply -f /path/to/new/secret.yaml --force'
 
     # Apply Kubernetes manifests
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
