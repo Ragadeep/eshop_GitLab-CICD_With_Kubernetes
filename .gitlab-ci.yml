@@ -155,6 +155,11 @@ deploy_job:
         chmod +x ~/kube/kubernetes-manifests/* && \
         /usr/bin/sudo /home/raga/.local/bin/kubectl apply -f ~/kube/kubernetes-manifests/"
 
+    $ ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
+    chmod +x ~/kube/kubernetes-manifests/* && 
+    sudo -E /home/raga/.local/bin/kubectl apply -f ~/kube/kubernetes-manifests/"
+
+
 
 
 
