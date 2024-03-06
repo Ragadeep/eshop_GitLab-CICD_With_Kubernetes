@@ -152,8 +152,11 @@ deploy_job:
 
     # Apply Kubernetes manifests and added server kubectl binary path. Provide sudo path also
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        chmod +x ~/kube/kubernetes-manifests/* && \
-        /usr/bin/sudo kubectl apply -f ~/kube/kubernetes-manifests/"
+        chmod +x ~/kube/kubernetes-manifests/*"
+    #     && \ /usr/bin/sudo kubectl apply -f ~/kube/kubernetes-manifests/"
+
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
+
 
 
 
