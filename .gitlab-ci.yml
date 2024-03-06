@@ -150,10 +150,10 @@ deploy_job:
     # Giving permissions to secret and running it.
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
 
-    # Apply Kubernetes manifests and added server kubectl binary path
+    # Apply Kubernetes manifests and added server kubectl binary path. Provide sudo path also
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
         chmod +x ~/kube/kubernetes-manifests/* && \
-        sudo /home/raga/.local/bin/kubectl apply -f ~/kube/kubernetes-manifests/"
+        /usr/bin/sudo /home/raga/.local/bin/kubectl apply -f ~/kube/kubernetes-manifests/"
 
 
 
