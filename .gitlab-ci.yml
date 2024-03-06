@@ -100,7 +100,7 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-.include:
+include:
   - local: 'build.yml'
 #  - local: 'imagescan.yml'
   - local: 'push.yml'
@@ -133,7 +133,7 @@ variables:
 
 
 
-deploy_job2:
+deploy_job:
   stage: deploy
   tags:
     - build
@@ -145,26 +145,21 @@ deploy_job2:
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
-    # secure copy secret to remote server
-    #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh    
-    #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'bash -s' < /home/raga/kube/acr_secret.sh
-    #- scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY sudo raga@$KUBE_SERVER_IP 'bash -s' < /home/raga/kube/acr_secret.sh
+    # secure copy secret to remote server.
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
+    # Giving permissions to secret and running it.
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
 
-
-
-.deploy_jobs:
-  stage: deploy
-  tags:
-    - build
-    - microservices
-  before_script:
-    - chmod 400 $SSH_PRIVATE_KEY 
-  script:
-    - # secure copy secret to remote server
+    # Apply Kubernetes manifests
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
-        kubectl create secret docker-registry acr-secret --docker-server=eshopimages.azurecr.io --docker-username=eshopimages --docker-password=jvOvtdM20HNanYNgRO4G3TP7hACQX3454/GaQ0icWR+ACRAMue0q"
+        chmod +x ~/kube/kubernetes-manifests/* && \
+        kubectl apply -f ~/kube/kubernetes-manifests/"
+
+
+
+
+
+
 
 
 
