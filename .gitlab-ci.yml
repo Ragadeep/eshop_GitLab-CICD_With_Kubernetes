@@ -63,7 +63,7 @@ variables:
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
 
 #Code Quality Scan
-.sonarqube-check:
+sonarqube-check:
   stage: sonar
   image: 
     name: sonarsource/sonar-scanner-cli:latest
@@ -105,7 +105,7 @@ Trivy_file_scan:
 #build docker images.
 include:
   - local: 'build.yml'
-#  - local: 'imagescan.yml'
+  - local: 'imagescan.yml'
   - local: 'push.yml'
 
 
