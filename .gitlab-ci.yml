@@ -34,10 +34,10 @@ stages:
 - deploy
 - deploy-uat
 - deploy-staging
+- Prod-approval
 - deploy-prod
 - review
 - dast
-- staging
 - canary
 - production
 - incremental rollout 10%
@@ -192,14 +192,9 @@ deploy_to_production:
 
 
 
-
-
-
-
-
 # Manual approval step for production deployment
-.production_approval:
-  stage: deploy
+production_approval:
+  stage: Prod-approval
   environment:
     name: production
     action: manual
