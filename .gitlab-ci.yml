@@ -143,10 +143,9 @@ deploy_to_uat:
     - microservices
   environment:
     name: uat
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY
   script:
-    # Source the appropriate environment file for UAT
-    - source .env.uat
-
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME:$KUBE_SERVER_IP 'chmod 400 $SSH_PRIVATE_KEY'
 
     # Copy Kubernetes manifests to the target server dynamically changing version
