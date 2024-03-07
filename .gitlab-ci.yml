@@ -143,12 +143,14 @@ deploy_to_uat:
     - microservices
   environment:
     name: uat
+  variables:
+  # Define default environment file to be sourced
+  ENV_FILE: .env.default
   before_script:
-    - source .env.uat
     - chmod 400 $SSH_PRIVATE_KEY
   script:
     # Copy Kubernetes manifests to the target server dynamically changing version
-    - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
+    - sed -i "s/\$VERSION_UAT/$VERSION_UAT/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
 
     # secure copy secret to remote server.
