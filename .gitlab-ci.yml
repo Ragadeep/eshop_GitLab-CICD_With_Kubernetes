@@ -136,15 +136,11 @@ variables:
 
 
 #Deploy Job
-deploy_to_uat:
+.deploy:
   stage: deploy-uat
   tags:
     - build
     - microservices
-  environment:
-    name: uat
-  variables:
-    SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_UAT"
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
@@ -165,13 +161,21 @@ deploy_to_uat:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
 
 
-.deploy_to_staging:
-  stage: deploy
+deploy_to_uat:
+  stage: deploy-uat
+  environment:
+    name: uat
+  variables:
+    SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_UAT"
+    KUBE_SERVER_IP: "$KUBE_SERVER_IP_UAT"
+
+deploy_to_staging:
+  stage: deploy-staging
   environment:
     name: staging
-  script:
-    # Deployment script for Staging environment
-    - echo "Staging"
+  variables:
+    SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_STAGING"
+    KUBE_SERVER_IP: "$KUBE_SERVER_IP_STAGING"
 
 
 .deploy_to_production:
