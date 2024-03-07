@@ -144,11 +144,9 @@ deploy_to_uat:
   environment:
     name: uat
   before_script:
+    - source .env.uat
     - chmod 400 $SSH_PRIVATE_KEY
   script:
-    # Load environment variables from .env.uat file
-    - source .env.uat
-
     # Copy Kubernetes manifests to the target server dynamically changing version
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
