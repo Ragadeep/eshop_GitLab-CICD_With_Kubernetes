@@ -144,7 +144,7 @@ deploy_to_uat:
   environment:
     name: uat
   variables:
-    - SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_UAT
+    SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_UAT"
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
