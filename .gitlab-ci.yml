@@ -197,7 +197,6 @@ production_approval:
   stage: Prod-approval
   environment:
     name: production
-    action: manual
   rules:
     - when: manual
     - exists:
