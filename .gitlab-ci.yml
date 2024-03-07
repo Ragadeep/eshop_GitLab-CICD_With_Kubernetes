@@ -191,11 +191,7 @@ deploy_to_production:
   rules:
     - when: manual
 
-  /*rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH =~ /^release-.*$/'
-      when: manual*/
+
 
 
 
