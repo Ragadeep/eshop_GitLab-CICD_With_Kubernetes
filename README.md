@@ -1,3 +1,5 @@
+Note : Another Readme folder with all steps
+
 <<<<<<< HEAD
 <p align="center">
 <img src="src/frontend/static/icons/Hipster_HeroLogoCyan.svg" width="300" alt="Online Boutique" />
