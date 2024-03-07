@@ -146,7 +146,7 @@ deploy_to_uat:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
-    - # Load environment variables from .env.uat file
+    # Load environment variables from .env.uat file
     - source .env.uat
 
     # Copy Kubernetes manifests to the target server dynamically changing version
