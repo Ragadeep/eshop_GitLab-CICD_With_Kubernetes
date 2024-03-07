@@ -137,7 +137,6 @@ variables:
 
 #Deploy Job
 .deploy:
-  stage: deploy-uat
   tags:
     - build
     - microservices
@@ -162,6 +161,7 @@ variables:
 
 
 deploy_to_uat:
+  extends: .deploy
   stage: deploy-uat
   environment:
     name: uat
@@ -170,6 +170,7 @@ deploy_to_uat:
     KUBE_SERVER_IP: "$KUBE_SERVER_IP_UAT"
 
 deploy_to_staging:
+  extends: .deploy
   stage: deploy-staging
   environment:
     name: staging
