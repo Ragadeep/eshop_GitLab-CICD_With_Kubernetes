@@ -91,7 +91,7 @@ variables:
   - template: Auto-DevOps.gitlab-ci.yml
 
 #File Scan with Trivy
-.Trivy_file_scan:
+Trivy_file_scan:
   stage: filescan
   image:
     name: aquasec/trivy:latest
@@ -103,14 +103,14 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-.include:
+include:
   - local: 'build.yml'
 #  - local: 'imagescan.yml'
   - local: 'push.yml'
 
 
 #Adding check   -- if a image containes more than 5 CRITICAL errors then pipeline fails.
-.check_critical_errors:
+check_critical_errors:
   stage: check
   script:
     - |
@@ -188,8 +188,10 @@ deploy_to_production:
     SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_PROD"
     KUBE_SERVER_IP: "$KUBE_SERVER_IP_PROD"
   rules:
-    - when: manual
-
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH =~ /^release-.*$/'
+      when: manual
 
 
 # Manual approval step for production deployment
@@ -207,61 +209,11 @@ production_approval:
     - echo "Please approve the production deployment."
 
 
-# Add manager's email for notification
-.notify_manager:
-  stage: deploy
-  environment:
-    name: production
-    action: manual
-  rules:
-    - when: manual
-    - exists:
-        - $CI_COMMIT_TAG
-        - $CI_COMMIT_BRANCH
-  before_script:
-    - source .env  # Load environment variables from the .env file
-  script:
-    # Notify manager for approval
-    - echo "Please approve the production deployment."
-    # Send email notification to the manager
-    - echo "$EMAIL_BODY" | mail -s "$EMAIL_SUBJECT" -r "$GITLAB_USER_EMAIL" "$MANAGER_EMAIL"
 
 
 
-
-
-
-
-
-
-.deploy_job:
-  stage: deploy
-  tags:
-    - build
-    - microservices
-  before_script:
-    - chmod 400 $SSH_PRIVATE_KEY
-  script:
-    # Copy Kubernetes manifests to the target server dynamically changing version
-    - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests $USERNAME@$KUBE_SERVER_IP:/home/raga/kube
-
-    # secure copy secret to remote server.
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh $USERNAME@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
-    # Giving permissions to secret and running it.
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
-
-    # Giving Permission to Kubernetes manifests files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP "
-        chmod +x ~/kube/kubernetes-manifests/*"
-
-    # Apply Kubernetes manifests
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
-
-
-
-
-
+# Protected environment available in premium Tier - Protect only to required users.
+# Notifies to manager for Prod Deployment availabe in  premium Tier
 
 
 
