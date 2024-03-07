@@ -143,9 +143,6 @@ deploy_to_uat:
     - microservices
   environment:
     name: uat
-  variables:
-  # Define default environment file to be sourced
-  ENV_FILE: .env.default
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
