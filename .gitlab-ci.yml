@@ -175,7 +175,7 @@ deploy_to_uat:
     - echo "Staging"
 
 
-deploy_to_production:
+.deploy_to_production:
   stage: deploy
   environment:
     name: production
