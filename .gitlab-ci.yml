@@ -184,7 +184,6 @@ deploy_to_production:
   stage: deploy-prod
   environment:
     name: production
-    action: manual
   variables:
     SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY_PROD"
     KUBE_SERVER_IP: "$KUBE_SERVER_IP_PROD"
