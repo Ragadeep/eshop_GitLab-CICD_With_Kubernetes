@@ -136,13 +136,15 @@ variables:
 
 
 #Deploy Job
-.deploy_to_uat:
+deploy_to_uat:
   stage: deploy-uat
   tags:
     - build
     - microservices
   environment:
     name: uat
+  variables:
+    - SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY_UAT
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
@@ -230,7 +232,7 @@ variables:
 
 
 
-deploy_job:
+.deploy_job:
   stage: deploy
   tags:
     - build
