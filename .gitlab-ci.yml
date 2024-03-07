@@ -61,6 +61,7 @@ variables:
   PRODUCTCATALOGSERVICE_TAG: eshopimages.azurecr.io/eshop/productcatalogservice
   RECOMMENDATIONSERVICE_TAG: eshopimages.azurecr.io/eshop/recommendationservice
   SHIPPINGSERVICE_TAG: eshopimages.azurecr.io/eshop/shippingservice
+  ENV_FILE: .env.uat
 
 #Code Quality Scan
 .sonarqube-check:
@@ -149,6 +150,9 @@ deploy_to_uat:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
+    # Source the appropriate environment file for UAT
+    - source .env.uat
+    
     # Copy Kubernetes manifests to the target server dynamically changing version
     - sed -i "s/\$VERSION_UAT/$VERSION_UAT/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
@@ -237,23 +241,23 @@ deploy_to_uat:
     - build
     - microservices
   before_script:
-    - chmod 400 $SSH_PRIVATE_KEY 
+    - chmod 400 $SSH_PRIVATE_KEY
   script:
     # Copy Kubernetes manifests to the target server dynamically changing version
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests $USERNAME@$KUBE_SERVER_IP:/home/raga/kube
 
     # secure copy secret to remote server.
-    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh raga@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
+    - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./script/acr_secret.sh $USERNAME@$KUBE_SERVER_IP:/home/raga/kube/acr_secret.sh && \
     # Giving permissions to secret and running it.
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP 'sudo chmod +x /home/raga/kube/acr_secret.sh && sudo bash /home/raga/kube/acr_secret.sh'
 
     # Giving Permission to Kubernetes manifests files
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP "
         chmod +x ~/kube/kubernetes-manifests/*"
 
     # Apply Kubernetes manifests
-    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $USERNAME@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
 
 
 
