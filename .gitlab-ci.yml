@@ -136,7 +136,7 @@ variables:
 
 
 #Deploy Job
-deploy_to_uat:
+.deploy_to_uat:
   stage: deploy-uat
   tags:
     - build
@@ -230,7 +230,7 @@ deploy_to_uat:
 
 
 
-.deploy_job:
+deploy_job:
   stage: deploy
   tags:
     - build
