@@ -103,7 +103,7 @@ variables:
       - trivy-file-scanning-report.txt  # Specify the path to the text file
 
 #build docker images.
-include:
+.include:
   - local: 'build.yml'
 #  - local: 'imagescan.yml'
   - local: 'push.yml'
@@ -146,6 +146,9 @@ deploy_to_uat:
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script:
+    - # Load environment variables from .env.uat file
+    - source .env.uat
+
     # Copy Kubernetes manifests to the target server dynamically changing version
     - sed -i "s/\$VERSION/$VERSION/g" ./kubernetes-manifests/*
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY -r ./kubernetes-manifests raga@$KUBE_SERVER_IP:/home/raga/kube
@@ -163,7 +166,7 @@ deploy_to_uat:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY raga@$KUBE_SERVER_IP "sudo kubectl apply -f /home/raga/kube/kubernetes-manifests"
 
 
-deploy_to_staging:
+.deploy_to_staging:
   stage: deploy
   environment:
     name: staging
@@ -181,8 +184,12 @@ deploy_to_production:
     - echo "Production"
 
 
+
+
+
+
 # Manual approval step for production deployment
-production_approval:
+.production_approval:
   stage: deploy
   environment:
     name: production
@@ -198,7 +205,7 @@ production_approval:
 
 
 # Add manager's email for notification
-notify_manager:
+.notify_manager:
   stage: deploy
   environment:
     name: production
